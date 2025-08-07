@@ -14,23 +14,35 @@ import GUI from "lil-gui";
           console.log("swap", name, params);
           this.gl.scene.quad.swap(name, params);
         }
-      };
-    
+      };    
 
-      this.gl = new Gl("c", params, preset);      
+      this.gl = new Gl("c", params, preset);
 
       this.gl.applyPreset(0);
 
       if (isTest) this.initGui( params[preset] );
     }
 
+      presets = {
+        "Preset 0": () => {
+          this.gl.applyPreset(0)
+          this.initGui( params[0] );
+        },
+        "Preset 1": () => {
+          this.gl.applyPreset(1)
+          this.initGui( params[1] );
+        }
+      }
+
       setUniforms() {
-        this.gl.scene.quad.setUniforms();
+        this.gl.scene.quad.setUniforms();        
       }
 
       initGui(data) {
         this.data = data;
         this.gui = new GUI();
+        this.gui.add(this.presets, "Preset 0")
+        this.gui.add(this.presets, "Preset 1")
         this.gui
           .add(this.data, "multx", 0, 10)
           .onChange(() => {this.setUniforms();}).listen();
@@ -66,14 +78,14 @@ import GUI from "lil-gui";
       hue: 0,
       brightness: 0.74,
       mouse: 1,
-      scale: 0.2,
+      scale: 0.29,
       scale2: 0.2,
       noise: 1,
       color: [0.0, 0.33, 0.66],
       color2: [0.0, 0.0, 0.0],
       bw: 1,
       bw2: 1,
-      time: 0.25
+      time: 0.5
     },
     1: {
        multx: 0.2,
@@ -91,7 +103,7 @@ import GUI from "lil-gui";
       time: 1
     }
   };
-
+  
   const gradient = new Gradient(params, 0, true);
 
   window.gradient = gradient;
