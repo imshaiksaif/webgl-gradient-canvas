@@ -8,7 +8,7 @@ import {
 
 
 import shaders from "../mat/fsq";
-import Tween from "gsap";
+
 
 export default class {
   constructor(gl, data = {}) {
@@ -119,10 +119,10 @@ export default class {
       }
     }
 
-    Tween.to(this.a, {
-      swap: target,
-      duration: d
-    });
+    // Tween.to(this.a, {
+    //   swap: target,
+    //   duration: d
+    // });
 
     // console.log(mode, this.uniforms.u_mode);
     this.setUniforms();
