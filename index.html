@@ -10,37 +10,9 @@
 
   <body>
     <main></main>
-    <canvas
-      id="c"
-      data-test="true"
-      data-gradient="wrapper"
-      data-multx="4"
-      data-multy="4"
-      data-hue="180"
-      data-brightness=".9"
-      data-mouse="-1"
-      data-scale="1"
-      data-scale2="3"
-      data-noise="0"
-      data-time=".2"
-      data-bw=".9"
-      data-bw2=".8"
-      data-red="0.00"
-      data-green="0.33"
-      data-blue="0.88"
-      data-red2="1.00"
-      data-green2="0.0"
-      data-blue2="0.0"
-      data-callback="true"
-    >
-    </canvas>
+    <canvas id="c"></canvas>
 
-    <script src="src/index.js" type="module"></script>
+    <script src="index.js" type="module"></script>
   </body>
 
-  <script>
-    window.addEventListener("gradientReady", () => {
-      // console.log("ready! in window");
-    });
-  </script>
 </html>

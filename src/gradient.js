@@ -1,9 +1,11 @@
 import Gl from "./modules/gl/gl.js";
 import GUI from "lil-gui";
 
-(() => {
-  class Gradient {
+
+  export class Gradient {
     constructor(params, preset, isTest) {
+
+      this.params = params;
 
       this.call = {
         mode: (name) => {
@@ -26,11 +28,11 @@ import GUI from "lil-gui";
       presets = {
         "Preset 0": () => {
           this.gl.applyPreset(0)
-          this.initGui( params[0] );
+          this.initGui( this.params[0] );
         },
         "Preset 1": () => {
           this.gl.applyPreset(1)
-          this.initGui( params[1] );
+          this.initGui( this.params[1] );
         }
       }
 
@@ -69,46 +71,9 @@ import GUI from "lil-gui";
           .onChange(() => {this.setUniforms();}).listen();
         this.gui.add(this.data, "time", 0, 1);
       }
-  }
+  }  
 
-  let params = {
-    0: {
-      multx: 0.2,
-      multy: 0.8,
-      hue: 0,
-      brightness: 0.74,
-      mouse: 1,
-      scale: 0.29,
-      scale2: 0.2,
-      noise: 1,
-      color: [0.0, 0.33, 0.66],
-      color2: [0.0, 0.0, 0.0],
-      bw: 1,
-      bw2: 1,
-      time: 0.5
-    },
-    1: {
-       multx: 0.2,
-      multy: 0.8,
-      hue: 0,
-      brightness: 0.8,
-      mouse: 1,
-      scale: 0.2,
-      scale2: 0.2,
-      noise: 1,
-      color: [0.0, 0.33, 0.66],
-      color2: [0.0, 0.0, 0.0],
-      bw: 0,
-      bw2: 0,
-      time: 1
-    }
-  };
-  
-  const gradient = new Gradient(params, 0, true);
 
-  window.gradient = gradient;
-
-})();
 
 /** Interface */
 // console.log(window.Gradient.call.mode("light"));
