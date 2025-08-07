@@ -1,4 +1,5 @@
-import { Gradient } from "./src/gradient";
+// import { Gradient } from "./dist/gradient-lib"
+import { Gradient } from "./src/gradient"
 
 let params = {
     0: {
