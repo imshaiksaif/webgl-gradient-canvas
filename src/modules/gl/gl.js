@@ -5,8 +5,32 @@ import Scene from "./scene";
 import Post from "./post/post";
 
 export default class {
-  constructor() {
-    this.canvas = document.getElementById("c");
+  constructor(canvasId, params, preset) {
+
+    this.params = params;
+
+    this.preset = preset;
+
+    // this.params = {
+    //   test: true,
+    //   // shader
+    //   multx: 0.2,
+    //   multy: 0.8,
+    //   hue: 0,
+    //   brightness: 0.8,
+    //   mouse: 1,
+    //   scale: 0.2,
+    //   scale2: 0.2,
+    //   noise: 1,
+    //   color: [0.0, 0.33, 0.66],
+    //   color2: [0.0, 0.0, 0.0],
+    //   bw: 0,
+    //   bw2: 0,
+    //   // javascript
+    //   time: 1
+    // };
+
+    this.canvas = document.getElementById(canvasId);
     this.gl = this.canvas.getContext("webgl");
     this.gl.clearColor(0.04, 0.04, 0.04, 1);
     this.gl.vp = { dpr: Math.min(window.devicePixelRatio, 2) };
@@ -32,9 +56,13 @@ export default class {
   create() {
     this.post = new Post(this.gl);
     this.post.isActive = false;
-    this.scene = new Scene(this.gl);
+    this.scene = new Scene(this.gl, this.params, this.preset);
 
     window.dispatchEvent(new Event("gradientReady"));
+  }
+
+  applyPreset(preset) {
+    this.scene.applyPreset(preset);
   }
 
   render() {

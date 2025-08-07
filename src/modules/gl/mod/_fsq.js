@@ -5,7 +5,7 @@ import {
   setBuffersAndAttributes,
   setUniforms
 } from "twgl.js";
-import GUI from "lil-gui";
+
 
 import shaders from "../mat/fsq";
 import Tween from "gsap";
@@ -18,7 +18,7 @@ export default class {
     this.programInfo = createProgramInfo(this.gl, this.shaders);
     // console.log(this.data);
 
-    if (this.data.test) this.initGui();
+    // if (this.data.test) this.initGui();
 
     this.a = {
       mode: 0,
@@ -35,6 +35,14 @@ export default class {
       position: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0]
     };
     this.bufferInfo = createBufferInfoFromArrays(this.gl, arrays);
+  }
+
+  applyPreset(data) {
+
+    this.data = data;
+    this.setUniforms();
+    console.log("Current background params:", this.data);
+
   }
 
   setUniforms() {
@@ -77,58 +85,7 @@ export default class {
     });
   }
 
-  initGui() {
-    this.gui = new GUI();
-    this.gui
-      .add(this.data, "multx", 0, 10)
-      .onChange(() => {
-        this.setUniforms();
-      })
-      .listen();
-    this.gui
-      .add(this.data, "multy", 0, 10)
-      .onChange(() => {
-        this.setUniforms();
-      })
-      .listen();
-    this.gui
-      .add(this.data, "hue", 0, 1)
-      .onChange(() => {
-        this.setUniforms();
-      })
-      .listen();
-    this.gui
-      .add(this.data, "brightness", 0, 5)
-      .onChange(() => {
-        this.setUniforms();
-      })
-      .listen();
-    this.gui
-      .add(this.data, "mouse", -1, 1)
-      .onChange(() => {
-        this.setUniforms();
-      })
-      .listen();
-    this.gui
-      .add(this.data, "scale", 0, 10)
-      .onChange(() => {
-        this.setUniforms();
-      })
-      .listen();
-    this.gui
-      .add(this.data, "noise", 0, 10)
-      .onChange(() => {
-        this.setUniforms();
-      })
-      .listen();
-    this.gui
-      .add(this.data, "bw", 0, 1)
-      .onChange(() => {
-        this.setUniforms();
-      })
-      .listen();
-    this.gui.add(this.data, "time", 0, 1);
-  }
+
 
   mode(mode) {
     if (mode === "light") {
