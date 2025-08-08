@@ -37,3 +37,4 @@ let params = {
   const gradient = new Gradient(params, 0, true);
 
   window.gradient = gradient;
+  window.Gradient = gradient;
