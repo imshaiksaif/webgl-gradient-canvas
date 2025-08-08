@@ -44,18 +44,18 @@ function Ve(e, t) {
     let p;
     return p = e[1], e[1] = e[4], e[4] = p, p = e[2], e[2] = e[8], e[8] = p, p = e[3], e[3] = e[12], e[12] = p, p = e[6], e[6] = e[9], e[9] = p, p = e[7], e[7] = e[13], e[13] = p, p = e[11], e[11] = e[14], e[14] = p, t;
   }
-  const i = e[0 * 4 + 0], n = e[0 * 4 + 1], r = e[0 * 4 + 2], o = e[0 * 4 + 3], s = e[1 * 4 + 0], a = e[1 * 4 + 1], l = e[1 * 4 + 2], c = e[1 * 4 + 3], f = e[2 * 4 + 0], u = e[2 * 4 + 1], h = e[2 * 4 + 2], d = e[2 * 4 + 3], v = e[3 * 4 + 0], A = e[3 * 4 + 1], _ = e[3 * 4 + 2], g = e[3 * 4 + 3];
-  return t[0] = i, t[1] = s, t[2] = f, t[3] = v, t[4] = n, t[5] = a, t[6] = u, t[7] = A, t[8] = r, t[9] = l, t[10] = h, t[11] = _, t[12] = o, t[13] = c, t[14] = d, t[15] = g, t;
+  const i = e[0 * 4 + 0], n = e[0 * 4 + 1], r = e[0 * 4 + 2], o = e[0 * 4 + 3], s = e[1 * 4 + 0], a = e[1 * 4 + 1], c = e[1 * 4 + 2], l = e[1 * 4 + 3], f = e[2 * 4 + 0], u = e[2 * 4 + 1], h = e[2 * 4 + 2], d = e[2 * 4 + 3], v = e[3 * 4 + 0], A = e[3 * 4 + 1], _ = e[3 * 4 + 2], g = e[3 * 4 + 3];
+  return t[0] = i, t[1] = s, t[2] = f, t[3] = v, t[4] = n, t[5] = a, t[6] = u, t[7] = A, t[8] = r, t[9] = c, t[10] = h, t[11] = _, t[12] = o, t[13] = l, t[14] = d, t[15] = g, t;
 }
 function Wt(e, t) {
   t = t || new x(16);
-  const i = e[0 * 4 + 0], n = e[0 * 4 + 1], r = e[0 * 4 + 2], o = e[0 * 4 + 3], s = e[1 * 4 + 0], a = e[1 * 4 + 1], l = e[1 * 4 + 2], c = e[1 * 4 + 3], f = e[2 * 4 + 0], u = e[2 * 4 + 1], h = e[2 * 4 + 2], d = e[2 * 4 + 3], v = e[3 * 4 + 0], A = e[3 * 4 + 1], _ = e[3 * 4 + 2], g = e[3 * 4 + 3], p = h * g, y = _ * d, b = l * g, w = _ * c, F = l * d, z = h * c, $ = r * g, I = _ * o, B = r * d, P = h * o, R = r * c, M = l * o, D = f * A, k = v * u, L = s * A, U = v * a, N = s * u, q = f * a, J = i * A, Z = v * n, tt = i * u, et = f * n, it = i * a, nt = s * n, Pt = p * a + w * u + F * A - (y * a + b * u + z * A), Rt = y * n + $ * u + P * A - (p * n + I * u + B * A), Mt = b * n + I * a + R * A - (w * n + $ * a + M * A), Dt = z * n + B * a + M * u - (F * n + P * a + R * u), T = 1 / (i * Pt + s * Rt + f * Mt + v * Dt);
-  return t[0] = T * Pt, t[1] = T * Rt, t[2] = T * Mt, t[3] = T * Dt, t[4] = T * (y * s + b * f + z * v - (p * s + w * f + F * v)), t[5] = T * (p * i + I * f + B * v - (y * i + $ * f + P * v)), t[6] = T * (w * i + $ * s + M * v - (b * i + I * s + R * v)), t[7] = T * (F * i + P * s + R * f - (z * i + B * s + M * f)), t[8] = T * (D * c + U * d + N * g - (k * c + L * d + q * g)), t[9] = T * (k * o + J * d + et * g - (D * o + Z * d + tt * g)), t[10] = T * (L * o + Z * c + it * g - (U * o + J * c + nt * g)), t[11] = T * (q * o + tt * c + nt * d - (N * o + et * c + it * d)), t[12] = T * (L * h + q * _ + k * l - (N * _ + D * l + U * h)), t[13] = T * (tt * _ + D * r + Z * h - (J * h + et * _ + k * r)), t[14] = T * (J * l + nt * _ + U * r - (it * _ + L * r + Z * l)), t[15] = T * (it * h + N * r + et * l - (tt * l + nt * h + q * r)), t;
+  const i = e[0 * 4 + 0], n = e[0 * 4 + 1], r = e[0 * 4 + 2], o = e[0 * 4 + 3], s = e[1 * 4 + 0], a = e[1 * 4 + 1], c = e[1 * 4 + 2], l = e[1 * 4 + 3], f = e[2 * 4 + 0], u = e[2 * 4 + 1], h = e[2 * 4 + 2], d = e[2 * 4 + 3], v = e[3 * 4 + 0], A = e[3 * 4 + 1], _ = e[3 * 4 + 2], g = e[3 * 4 + 3], p = h * g, y = _ * d, b = c * g, w = _ * l, F = c * d, z = h * l, $ = r * g, I = _ * o, B = r * d, P = h * o, R = r * l, M = c * o, D = f * A, k = v * u, L = s * A, U = v * a, N = s * u, q = f * a, J = i * A, Z = v * n, tt = i * u, et = f * n, it = i * a, nt = s * n, Pt = p * a + w * u + F * A - (y * a + b * u + z * A), Rt = y * n + $ * u + P * A - (p * n + I * u + B * A), Mt = b * n + I * a + R * A - (w * n + $ * a + M * A), Dt = z * n + B * a + M * u - (F * n + P * a + R * u), T = 1 / (i * Pt + s * Rt + f * Mt + v * Dt);
+  return t[0] = T * Pt, t[1] = T * Rt, t[2] = T * Mt, t[3] = T * Dt, t[4] = T * (y * s + b * f + z * v - (p * s + w * f + F * v)), t[5] = T * (p * i + I * f + B * v - (y * i + $ * f + P * v)), t[6] = T * (w * i + $ * s + M * v - (b * i + I * s + R * v)), t[7] = T * (F * i + P * s + R * f - (z * i + B * s + M * f)), t[8] = T * (D * l + U * d + N * g - (k * l + L * d + q * g)), t[9] = T * (k * o + J * d + et * g - (D * o + Z * d + tt * g)), t[10] = T * (L * o + Z * l + it * g - (U * o + J * l + nt * g)), t[11] = T * (q * o + tt * l + nt * d - (N * o + et * l + it * d)), t[12] = T * (L * h + q * _ + k * c - (N * _ + D * c + U * h)), t[13] = T * (tt * _ + D * r + Z * h - (J * h + et * _ + k * r)), t[14] = T * (J * c + nt * _ + U * r - (it * _ + L * r + Z * c)), t[15] = T * (it * h + N * r + et * c - (tt * c + nt * h + q * r)), t;
 }
 function Ge(e, t, i) {
   i = i || new x(16);
-  const n = e[0], r = e[1], o = e[2], s = e[3], a = e[4 + 0], l = e[4 + 1], c = e[4 + 2], f = e[4 + 3], u = e[8 + 0], h = e[8 + 1], d = e[8 + 2], v = e[8 + 3], A = e[12 + 0], _ = e[12 + 1], g = e[12 + 2], p = e[12 + 3], y = t[0], b = t[1], w = t[2], F = t[3], z = t[4 + 0], $ = t[4 + 1], I = t[4 + 2], B = t[4 + 3], P = t[8 + 0], R = t[8 + 1], M = t[8 + 2], D = t[8 + 3], k = t[12 + 0], L = t[12 + 1], U = t[12 + 2], N = t[12 + 3];
-  return i[0] = n * y + a * b + u * w + A * F, i[1] = r * y + l * b + h * w + _ * F, i[2] = o * y + c * b + d * w + g * F, i[3] = s * y + f * b + v * w + p * F, i[4] = n * z + a * $ + u * I + A * B, i[5] = r * z + l * $ + h * I + _ * B, i[6] = o * z + c * $ + d * I + g * B, i[7] = s * z + f * $ + v * I + p * B, i[8] = n * P + a * R + u * M + A * D, i[9] = r * P + l * R + h * M + _ * D, i[10] = o * P + c * R + d * M + g * D, i[11] = s * P + f * R + v * M + p * D, i[12] = n * k + a * L + u * U + A * N, i[13] = r * k + l * L + h * U + _ * N, i[14] = o * k + c * L + d * U + g * N, i[15] = s * k + f * L + v * U + p * N, i;
+  const n = e[0], r = e[1], o = e[2], s = e[3], a = e[4 + 0], c = e[4 + 1], l = e[4 + 2], f = e[4 + 3], u = e[8 + 0], h = e[8 + 1], d = e[8 + 2], v = e[8 + 3], A = e[12 + 0], _ = e[12 + 1], g = e[12 + 2], p = e[12 + 3], y = t[0], b = t[1], w = t[2], F = t[3], z = t[4 + 0], $ = t[4 + 1], I = t[4 + 2], B = t[4 + 3], P = t[8 + 0], R = t[8 + 1], M = t[8 + 2], D = t[8 + 3], k = t[12 + 0], L = t[12 + 1], U = t[12 + 2], N = t[12 + 3];
+  return i[0] = n * y + a * b + u * w + A * F, i[1] = r * y + c * b + h * w + _ * F, i[2] = o * y + l * b + d * w + g * F, i[3] = s * y + f * b + v * w + p * F, i[4] = n * z + a * $ + u * I + A * B, i[5] = r * z + c * $ + h * I + _ * B, i[6] = o * z + l * $ + d * I + g * B, i[7] = s * z + f * $ + v * I + p * B, i[8] = n * P + a * R + u * M + A * D, i[9] = r * P + c * R + h * M + _ * D, i[10] = o * P + l * R + d * M + g * D, i[11] = s * P + f * R + v * M + p * D, i[12] = n * k + a * L + u * U + A * N, i[13] = r * k + c * L + h * U + _ * N, i[14] = o * k + l * L + d * U + g * N, i[15] = s * k + f * L + v * U + p * N, i;
 }
 function He(e, t, i) {
   return i = i || Xt(), e !== i && (i[0] = e[0], i[1] = e[1], i[2] = e[2], i[3] = e[3], i[4] = e[4], i[5] = e[5], i[6] = e[6], i[7] = e[7], i[8] = e[8], i[9] = e[9], i[10] = e[10], i[11] = e[11]), i[12] = t[0], i[13] = t[1], i[14] = t[2], i[15] = 1, i;
@@ -83,8 +83,8 @@ function Ke(e, t, i, n, r, o, s) {
 }
 function Qe(e, t, i, n, r, o, s) {
   s = s || new x(16);
-  const a = t - e, l = n - i, c = r - o;
-  return s[0] = 2 * r / a, s[1] = 0, s[2] = 0, s[3] = 0, s[4] = 0, s[5] = 2 * r / l, s[6] = 0, s[7] = 0, s[8] = (e + t) / a, s[9] = (n + i) / l, s[10] = o / c, s[11] = -1, s[12] = 0, s[13] = 0, s[14] = r * o / c, s[15] = 0, s;
+  const a = t - e, c = n - i, l = r - o;
+  return s[0] = 2 * r / a, s[1] = 0, s[2] = 0, s[3] = 0, s[4] = 0, s[5] = 2 * r / c, s[6] = 0, s[7] = 0, s[8] = (e + t) / a, s[9] = (n + i) / c, s[10] = o / l, s[11] = -1, s[12] = 0, s[13] = 0, s[14] = r * o / l, s[15] = 0, s;
 }
 let G, X, V;
 function qe(e, t, i, n) {
@@ -98,8 +98,8 @@ function Je(e, t) {
 }
 function Ze(e, t, i) {
   i = i || new x(16);
-  const n = t[0], r = t[1], o = t[2], s = e[0], a = e[1], l = e[2], c = e[3], f = e[1 * 4 + 0], u = e[1 * 4 + 1], h = e[1 * 4 + 2], d = e[1 * 4 + 3], v = e[2 * 4 + 0], A = e[2 * 4 + 1], _ = e[2 * 4 + 2], g = e[2 * 4 + 3], p = e[3 * 4 + 0], y = e[3 * 4 + 1], b = e[3 * 4 + 2], w = e[3 * 4 + 3];
-  return e !== i && (i[0] = s, i[1] = a, i[2] = l, i[3] = c, i[4] = f, i[5] = u, i[6] = h, i[7] = d, i[8] = v, i[9] = A, i[10] = _, i[11] = g), i[12] = s * n + f * r + v * o + p, i[13] = a * n + u * r + A * o + y, i[14] = l * n + h * r + _ * o + b, i[15] = c * n + d * r + g * o + w, i;
+  const n = t[0], r = t[1], o = t[2], s = e[0], a = e[1], c = e[2], l = e[3], f = e[1 * 4 + 0], u = e[1 * 4 + 1], h = e[1 * 4 + 2], d = e[1 * 4 + 3], v = e[2 * 4 + 0], A = e[2 * 4 + 1], _ = e[2 * 4 + 2], g = e[2 * 4 + 3], p = e[3 * 4 + 0], y = e[3 * 4 + 1], b = e[3 * 4 + 2], w = e[3 * 4 + 3];
+  return e !== i && (i[0] = s, i[1] = a, i[2] = c, i[3] = l, i[4] = f, i[5] = u, i[6] = h, i[7] = d, i[8] = v, i[9] = A, i[10] = _, i[11] = g), i[12] = s * n + f * r + v * o + p, i[13] = a * n + u * r + A * o + y, i[14] = c * n + h * r + _ * o + b, i[15] = l * n + d * r + g * o + w, i;
 }
 function ti(e, t) {
   t = t || new x(16);
@@ -108,8 +108,8 @@ function ti(e, t) {
 }
 function ei(e, t, i) {
   i = i || new x(16);
-  const n = e[4], r = e[5], o = e[6], s = e[7], a = e[8], l = e[9], c = e[10], f = e[11], u = Math.cos(t), h = Math.sin(t);
-  return i[4] = u * n + h * a, i[5] = u * r + h * l, i[6] = u * o + h * c, i[7] = u * s + h * f, i[8] = u * a - h * n, i[9] = u * l - h * r, i[10] = u * c - h * o, i[11] = u * f - h * s, e !== i && (i[0] = e[0], i[1] = e[1], i[2] = e[2], i[3] = e[3], i[12] = e[12], i[13] = e[13], i[14] = e[14], i[15] = e[15]), i;
+  const n = e[4], r = e[5], o = e[6], s = e[7], a = e[8], c = e[9], l = e[10], f = e[11], u = Math.cos(t), h = Math.sin(t);
+  return i[4] = u * n + h * a, i[5] = u * r + h * c, i[6] = u * o + h * l, i[7] = u * s + h * f, i[8] = u * a - h * n, i[9] = u * c - h * r, i[10] = u * l - h * o, i[11] = u * f - h * s, e !== i && (i[0] = e[0], i[1] = e[1], i[2] = e[2], i[3] = e[3], i[12] = e[12], i[13] = e[13], i[14] = e[14], i[15] = e[15]), i;
 }
 function ii(e, t) {
   t = t || new x(16);
@@ -118,8 +118,8 @@ function ii(e, t) {
 }
 function ni(e, t, i) {
   i = i || new x(16);
-  const n = e[0 * 4 + 0], r = e[0 * 4 + 1], o = e[0 * 4 + 2], s = e[0 * 4 + 3], a = e[2 * 4 + 0], l = e[2 * 4 + 1], c = e[2 * 4 + 2], f = e[2 * 4 + 3], u = Math.cos(t), h = Math.sin(t);
-  return i[0] = u * n - h * a, i[1] = u * r - h * l, i[2] = u * o - h * c, i[3] = u * s - h * f, i[8] = u * a + h * n, i[9] = u * l + h * r, i[10] = u * c + h * o, i[11] = u * f + h * s, e !== i && (i[4] = e[4], i[5] = e[5], i[6] = e[6], i[7] = e[7], i[12] = e[12], i[13] = e[13], i[14] = e[14], i[15] = e[15]), i;
+  const n = e[0 * 4 + 0], r = e[0 * 4 + 1], o = e[0 * 4 + 2], s = e[0 * 4 + 3], a = e[2 * 4 + 0], c = e[2 * 4 + 1], l = e[2 * 4 + 2], f = e[2 * 4 + 3], u = Math.cos(t), h = Math.sin(t);
+  return i[0] = u * n - h * a, i[1] = u * r - h * c, i[2] = u * o - h * l, i[3] = u * s - h * f, i[8] = u * a + h * n, i[9] = u * c + h * r, i[10] = u * l + h * o, i[11] = u * f + h * s, e !== i && (i[4] = e[4], i[5] = e[5], i[6] = e[6], i[7] = e[7], i[12] = e[12], i[13] = e[13], i[14] = e[14], i[15] = e[15]), i;
 }
 function ri(e, t) {
   t = t || new x(16);
@@ -128,23 +128,23 @@ function ri(e, t) {
 }
 function oi(e, t, i) {
   i = i || new x(16);
-  const n = e[0 * 4 + 0], r = e[0 * 4 + 1], o = e[0 * 4 + 2], s = e[0 * 4 + 3], a = e[1 * 4 + 0], l = e[1 * 4 + 1], c = e[1 * 4 + 2], f = e[1 * 4 + 3], u = Math.cos(t), h = Math.sin(t);
-  return i[0] = u * n + h * a, i[1] = u * r + h * l, i[2] = u * o + h * c, i[3] = u * s + h * f, i[4] = u * a - h * n, i[5] = u * l - h * r, i[6] = u * c - h * o, i[7] = u * f - h * s, e !== i && (i[8] = e[8], i[9] = e[9], i[10] = e[10], i[11] = e[11], i[12] = e[12], i[13] = e[13], i[14] = e[14], i[15] = e[15]), i;
+  const n = e[0 * 4 + 0], r = e[0 * 4 + 1], o = e[0 * 4 + 2], s = e[0 * 4 + 3], a = e[1 * 4 + 0], c = e[1 * 4 + 1], l = e[1 * 4 + 2], f = e[1 * 4 + 3], u = Math.cos(t), h = Math.sin(t);
+  return i[0] = u * n + h * a, i[1] = u * r + h * c, i[2] = u * o + h * l, i[3] = u * s + h * f, i[4] = u * a - h * n, i[5] = u * c - h * r, i[6] = u * l - h * o, i[7] = u * f - h * s, e !== i && (i[8] = e[8], i[9] = e[9], i[10] = e[10], i[11] = e[11], i[12] = e[12], i[13] = e[13], i[14] = e[14], i[15] = e[15]), i;
 }
 function si(e, t, i) {
   i = i || new x(16);
   let n = e[0], r = e[1], o = e[2];
   const s = Math.sqrt(n * n + r * r + o * o);
   n /= s, r /= s, o /= s;
-  const a = n * n, l = r * r, c = o * o, f = Math.cos(t), u = Math.sin(t), h = 1 - f;
-  return i[0] = a + (1 - a) * f, i[1] = n * r * h + o * u, i[2] = n * o * h - r * u, i[3] = 0, i[4] = n * r * h - o * u, i[5] = l + (1 - l) * f, i[6] = r * o * h + n * u, i[7] = 0, i[8] = n * o * h + r * u, i[9] = r * o * h - n * u, i[10] = c + (1 - c) * f, i[11] = 0, i[12] = 0, i[13] = 0, i[14] = 0, i[15] = 1, i;
+  const a = n * n, c = r * r, l = o * o, f = Math.cos(t), u = Math.sin(t), h = 1 - f;
+  return i[0] = a + (1 - a) * f, i[1] = n * r * h + o * u, i[2] = n * o * h - r * u, i[3] = 0, i[4] = n * r * h - o * u, i[5] = c + (1 - c) * f, i[6] = r * o * h + n * u, i[7] = 0, i[8] = n * o * h + r * u, i[9] = r * o * h - n * u, i[10] = l + (1 - l) * f, i[11] = 0, i[12] = 0, i[13] = 0, i[14] = 0, i[15] = 1, i;
 }
 function ai(e, t, i, n) {
   n = n || new x(16);
   let r = t[0], o = t[1], s = t[2];
   const a = Math.sqrt(r * r + o * o + s * s);
   r /= a, o /= a, s /= a;
-  const l = r * r, c = o * o, f = s * s, u = Math.cos(i), h = Math.sin(i), d = 1 - u, v = l + (1 - l) * u, A = r * o * d + s * h, _ = r * s * d - o * h, g = r * o * d - s * h, p = c + (1 - c) * u, y = o * s * d + r * h, b = r * s * d + o * h, w = o * s * d - r * h, F = f + (1 - f) * u, z = e[0], $ = e[1], I = e[2], B = e[3], P = e[4], R = e[5], M = e[6], D = e[7], k = e[8], L = e[9], U = e[10], N = e[11];
+  const c = r * r, l = o * o, f = s * s, u = Math.cos(i), h = Math.sin(i), d = 1 - u, v = c + (1 - c) * u, A = r * o * d + s * h, _ = r * s * d - o * h, g = r * o * d - s * h, p = l + (1 - l) * u, y = o * s * d + r * h, b = r * s * d + o * h, w = o * s * d - r * h, F = f + (1 - f) * u, z = e[0], $ = e[1], I = e[2], B = e[3], P = e[4], R = e[5], M = e[6], D = e[7], k = e[8], L = e[9], U = e[10], N = e[11];
   return n[0] = v * z + A * P + _ * k, n[1] = v * $ + A * R + _ * L, n[2] = v * I + A * M + _ * U, n[3] = v * B + A * D + _ * N, n[4] = g * z + p * P + y * k, n[5] = g * $ + p * R + y * L, n[6] = g * I + p * M + y * U, n[7] = g * B + p * D + y * N, n[8] = b * z + w * P + F * k, n[9] = b * $ + w * R + F * L, n[10] = b * I + w * M + F * U, n[11] = b * B + w * D + F * N, e !== n && (n[12] = e[12], n[13] = e[13], n[14] = e[14], n[15] = e[15]), n;
 }
 function ci(e, t) {
@@ -366,11 +366,11 @@ function Hi(e, t) {
       } else {
         let s;
         r.buffer && r.buffer instanceof WebGLBuffer ? s = Oi : typeof r == "number" || typeof r.data == "number" ? s = Vi : s = Gi;
-        const { buffer: a, type: l, numValues: c, arrayType: f } = s(e, r, n), u = r.normalize !== void 0 ? r.normalize : Ri(f), h = Ui(r, n, c);
+        const { buffer: a, type: c, numValues: l, arrayType: f } = s(e, r, n), u = r.normalize !== void 0 ? r.normalize : Ri(f), h = Ui(r, n, l);
         i[o] = {
           buffer: a,
           numComponents: h,
-          type: l,
+          type: c,
           normalize: u,
           stride: r.stride || 0,
           offset: r.offset || 0,
@@ -396,10 +396,10 @@ function Xi(e, t) {
   e.bindBuffer(W, r.buffer);
   const o = e.getBufferParameter(W, Si);
   e.bindBuffer(W, null);
-  const s = Yi(e, r.type), a = o / s, l = r.numComponents || r.size, c = a / l;
-  if (c % 1 !== 0)
-    throw new Error(`numComponents ${l} not correct for length ${length}`);
-  return c;
+  const s = Yi(e, r.type), a = o / s, c = r.numComponents || r.size, l = a / c;
+  if (l % 1 !== 0)
+    throw new Error(`numComponents ${c} not correct for length ${length}`);
+  return l;
 }
 function oe(e, t, i) {
   const n = Hi(e, t), r = Object.assign({}, i || {});
@@ -573,14 +573,14 @@ function C(e, t, i, n, r) {
   for (let a = 0; a < r; ++a)
     s[a] = i + a;
   return Tt(e) ? function(a) {
-    e.uniform1iv(n, s), a.forEach(function(l, c) {
-      e.activeTexture(rt + s[c]);
+    e.uniform1iv(n, s), a.forEach(function(c, l) {
+      e.activeTexture(rt + s[l]);
       let f, u;
-      !l || Jt(e, l) ? (f = l, u = null) : (f = l.texture, u = l.sampler), e.bindSampler(i, u), e.bindTexture(o, f);
+      !c || Jt(e, c) ? (f = c, u = null) : (f = c.texture, u = c.sampler), e.bindSampler(i, u), e.bindTexture(o, f);
     });
   } : function(a) {
-    e.uniform1iv(n, s), a.forEach(function(l, c) {
-      e.activeTexture(rt + s[c]), e.bindTexture(o, l);
+    e.uniform1iv(n, s), a.forEach(function(c, l) {
+      e.activeTexture(rt + s[l]), e.bindTexture(o, c);
     });
   };
 }
@@ -692,12 +692,12 @@ function $t(e, t, i) {
   const n = i.size, r = i.count;
   return function(o) {
     e.bindBuffer(st, o.buffer);
-    const s = o.size || o.numComponents || n, a = s / r, l = o.type || at, f = m[l].size * s, u = o.normalize || !1, h = o.offset || 0, d = f / r;
+    const s = o.size || o.numComponents || n, a = s / r, c = o.type || at, f = m[c].size * s, u = o.normalize || !1, h = o.offset || 0, d = f / r;
     for (let v = 0; v < r; ++v)
       e.enableVertexAttribArray(t + v), e.vertexAttribPointer(
         t + v,
         a,
-        l,
+        c,
         u,
         f,
         h + d * v
@@ -727,7 +727,7 @@ E[_e] = { size: 16, setter: $t, count: 4 };
 const jn = /ERROR:\s*\d+:(\d+)/gi;
 function Kn(e, t = "", i = 0) {
   const n = [...t.matchAll(jn)], r = new Map(n.map((o, s) => {
-    const a = parseInt(o[1]), l = n[s + 1], c = l ? l.index : t.length, f = t.substring(o.index, c);
+    const a = parseInt(o[1]), c = n[s + 1], l = c ? c.index : t.length, f = t.substring(o.index, l);
     return [a - 1, f];
   }));
   return e.split(`
@@ -753,9 +753,9 @@ ${e.errors.join(`
 }
 function qn(e, t, i, n) {
   if (n = n || St, !e.getShaderParameter(i, Ki)) {
-    const o = e.getShaderInfoLog(i), { lineOffset: s, shaderSource: a } = $e(e.getShaderSource(i)), l = `${Kn(a, o, s)}
+    const o = e.getShaderInfoLog(i), { lineOffset: s, shaderSource: a } = $e(e.getShaderSource(i)), c = `${Kn(a, o, s)}
 Error compiling ${Wi(e, t)}: ${o}`;
-    return n(l), l;
+    return n(c), c;
   }
   return "";
 }
@@ -764,12 +764,12 @@ function It(e, t, i) {
   if (typeof t == "function" && (i = t, t = void 0), typeof e == "function")
     i = e, e = void 0;
   else if (e && !Array.isArray(e)) {
-    const c = e;
-    i = c.errorCallback, e = c.attribLocations, n = c.transformFeedbackVaryings, r = c.transformFeedbackMode, o = c.callback;
+    const l = e;
+    i = l.errorCallback, e = l.attribLocations, n = l.transformFeedbackVaryings, r = l.transformFeedbackMode, o = l.callback;
   }
-  const s = i || St, a = [], l = {
-    errorCallback(c, ...f) {
-      a.push(c), s(c, ...f);
+  const s = i || St, a = [], c = {
+    errorCallback(l, ...f) {
+      a.push(l), s(l, ...f);
     },
     transformFeedbackVaryings: n,
     transformFeedbackMode: r,
@@ -777,12 +777,12 @@ function It(e, t, i) {
     errors: a
   };
   {
-    let c = {};
+    let l = {};
     Array.isArray(e) ? e.forEach(function(f, u) {
-      c[f] = t ? t[u] : u;
-    }) : c = e || {}, l.attribLocations = c;
+      l[f] = t ? t[u] : u;
+    }) : l = e || {}, c.attribLocations = l;
   }
-  return l;
+  return c;
 }
 const Jn = [
   "VERTEX_SHADER",
@@ -808,14 +808,14 @@ function ir(e, t, i) {
     transformFeedbackMode: s
   } = It(i);
   for (let a = 0; a < t.length; ++a) {
-    let l = t[a];
-    if (typeof l == "string") {
-      const c = se(l), f = c ? c.text : l;
+    let c = t[a];
+    if (typeof c == "string") {
+      const l = se(c), f = l ? l.text : c;
       let u = e[Jn[a]];
-      c && c.type && (u = Zn(e, c.type) || u), l = e.createShader(u), e.shaderSource(l, $e(f).shaderSource), e.compileShader(l), e.attachShader(n, l);
+      l && l.type && (u = Zn(e, l.type) || u), c = e.createShader(u), e.shaderSource(c, $e(f).shaderSource), e.compileShader(c), e.attachShader(n, c);
     }
   }
-  Object.entries(r).forEach(([a, l]) => e.bindAttribLocation(n, l, a));
+  Object.entries(r).forEach(([a, c]) => e.bindAttribLocation(n, c, a));
   {
     let a = o;
     a && (a.attribs && (a = a.attribs), Array.isArray(a) || (a = Object.keys(a)), e.transformFeedbackVaryings(n, a, s || Zi));
@@ -824,18 +824,18 @@ function ir(e, t, i) {
 }
 function nr(e, t, i, n, r) {
   const o = It(i, n, r), s = new Set(t), a = ir(e, t, o);
-  function l(c, f) {
-    const u = or(c, f, o.errorCallback);
-    return u && tr(c, f, s), u;
+  function c(l, f) {
+    const u = or(l, f, o.errorCallback);
+    return u && tr(l, f, s), u;
   }
   if (o.callback) {
     rr(e, a).then(() => {
-      const c = l(e, a);
-      o.callback(c, c ? void 0 : a);
+      const l = c(e, a);
+      o.callback(l, l ? void 0 : a);
     });
     return;
   }
-  return l(e, a) ? void 0 : a;
+  return c(e, a) ? void 0 : a;
 }
 async function rr(e, t) {
   const i = e.getExtension("KHR_parallel_shader_compile"), n = i ? (o, s) => o.getProgramParameter(s, i.COMPLETION_STATUS_KHR) : () => !0;
@@ -868,13 +868,13 @@ function lr(e, t, i, n) {
   for (; ; ) {
     const a = r[o++];
     s += a;
-    const l = cr(a[0]), c = l ? parseInt(a) : a;
-    if (l && (s += r[o++]), o === r.length) {
-      i[c] = t;
+    const c = cr(a[0]), l = c ? parseInt(a) : a;
+    if (c && (s += r[o++]), o === r.length) {
+      i[l] = t;
       break;
     } else {
-      const u = r[o++], h = u === "[", d = i[c] || (h ? [] : {});
-      i[c] = d, i = d, n[s] = n[s] || function(v) {
+      const u = r[o++], h = u === "[", d = i[l] || (h ? [] : {});
+      i[l] = d, i = d, n[s] = n[s] || function(v) {
         return function(A) {
           Be(v, A);
         };
@@ -884,29 +884,29 @@ function lr(e, t, i, n) {
 }
 function ur(e, t) {
   let i = 0;
-  function n(a, l, c) {
-    const f = l.name.endsWith("[0]"), u = l.type, h = m[u];
+  function n(a, c, l) {
+    const f = c.name.endsWith("[0]"), u = c.type, h = m[u];
     if (!h)
       throw new Error(`unknown type: 0x${u.toString(16)}`);
     let d;
     if (h.bindPoint) {
       const v = i;
-      i += l.size, f ? d = h.arraySetter(e, u, v, c, l.size) : d = h.setter(e, u, v, c, l.size);
+      i += c.size, f ? d = h.arraySetter(e, u, v, l, c.size) : d = h.setter(e, u, v, l, c.size);
     } else
-      h.arraySetter && f ? d = h.arraySetter(e, c) : d = h.setter(e, c);
-    return d.location = c, d;
+      h.arraySetter && f ? d = h.arraySetter(e, l) : d = h.setter(e, l);
+    return d.location = l, d;
   }
   const r = {}, o = {}, s = e.getProgramParameter(t, ae);
   for (let a = 0; a < s; ++a) {
-    const l = e.getActiveUniform(t, a);
-    if (Ie(l))
+    const c = e.getActiveUniform(t, a);
+    if (Ie(c))
       continue;
-    let c = l.name;
-    c.endsWith("[0]") && (c = c.substr(0, c.length - 3));
-    const f = e.getUniformLocation(t, l.name);
+    let l = c.name;
+    l.endsWith("[0]") && (l = l.substr(0, l.length - 3));
+    const f = e.getUniformLocation(t, c.name);
     if (f) {
-      const u = n(t, l, f);
-      r[c] = u, lr(c, u, o, r);
+      const u = n(t, c, f);
+      r[l] = u, lr(l, u, o, r);
     }
   }
   return r;
@@ -927,8 +927,8 @@ function fr(e, t) {
   const i = e.getProgramParameter(t, ae), n = [], r = [];
   for (let a = 0; a < i; ++a) {
     r.push(a), n.push({});
-    const l = e.getActiveUniform(t, a);
-    n[a].name = l.name;
+    const c = e.getActiveUniform(t, a);
+    n[a].name = c.name;
   }
   [
     ["UNIFORM_TYPE", "type"],
@@ -937,21 +937,21 @@ function fr(e, t) {
     ["UNIFORM_BLOCK_INDEX", "blockNdx"],
     ["UNIFORM_OFFSET", "offset"]
   ].forEach(function(a) {
-    const l = a[0], c = a[1];
-    e.getActiveUniforms(t, r, e[l]).forEach(function(f, u) {
-      n[u][c] = f;
+    const c = a[0], l = a[1];
+    e.getActiveUniforms(t, r, e[c]).forEach(function(f, u) {
+      n[u][l] = f;
     });
   });
   const o = {}, s = e.getProgramParameter(t, nn);
   for (let a = 0; a < s; ++a) {
-    const l = e.getActiveUniformBlockName(t, a), c = {
-      index: e.getUniformBlockIndex(t, l),
+    const c = e.getActiveUniformBlockName(t, a), l = {
+      index: e.getUniformBlockIndex(t, c),
       usedByVertexShader: e.getActiveUniformBlockParameter(t, a, rn),
       usedByFragmentShader: e.getActiveUniformBlockParameter(t, a, on),
       size: e.getActiveUniformBlockParameter(t, a, sn),
       uniformIndices: e.getActiveUniformBlockParameter(t, a, an)
     };
-    c.used = c.usedByVertexShader || c.usedByFragmentShader, o[l] = c;
+    l.used = l.usedByVertexShader || l.usedByFragmentShader, o[c] = l;
   }
   return {
     blockSpecs: o,
@@ -985,8 +985,8 @@ function pr(e, t) {
     const o = e.getActiveAttrib(t, r);
     if (Ie(o))
       continue;
-    const s = e.getAttribLocation(t, o.name), a = E[o.type], l = a.setter(e, s, a);
-    l.location = s, i[o.name] = l;
+    const s = e.getAttribLocation(t, o.name), a = E[o.type], c = a.setter(e, s, a);
+    c.location = s, i[o.name] = c;
   }
   return i;
 }
@@ -1010,31 +1010,31 @@ function Vt(e, t) {
 const dr = /\s|{|}|;/;
 function Re(e, t, i, n, r) {
   const o = It(i, n, r), s = [];
-  if (t = t.map(function(c) {
-    if (!dr.test(c)) {
-      const f = se(c);
+  if (t = t.map(function(l) {
+    if (!dr.test(l)) {
+      const f = se(l);
       if (f)
-        c = f.text;
+        l = f.text;
       else {
-        const u = `no element with id: ${c}`;
+        const u = `no element with id: ${l}`;
         o.errorCallback(u), s.push(u);
       }
     }
-    return c;
+    return l;
   }), s.length)
     return Qn(o, "");
   const a = o.callback;
-  a && (o.callback = (c, f) => {
-    a(c, c ? void 0 : Vt(e, f));
+  a && (o.callback = (l, f) => {
+    a(l, l ? void 0 : Vt(e, f));
   });
-  const l = sr(e, t, o);
-  return l ? Vt(e, l) : null;
+  const c = sr(e, t, o);
+  return c ? Vt(e, c) : null;
 }
 const mr = 4, Gt = 5123;
 function Me(e, t, i, n, r, o) {
   i = i === void 0 ? mr : i;
-  const s = t.indices, a = t.elementType, l = n === void 0 ? t.numElements : n;
-  r = r === void 0 ? 0 : r, a || s ? o !== void 0 ? e.drawElementsInstanced(i, l, a === void 0 ? Gt : t.elementType, r, o) : e.drawElements(i, l, a === void 0 ? Gt : t.elementType, r) : o !== void 0 ? e.drawArraysInstanced(i, r, l, o) : e.drawArrays(i, r, l);
+  const s = t.indices, a = t.elementType, c = n === void 0 ? t.numElements : n;
+  r = r === void 0 ? 0 : r, a || s ? o !== void 0 ? e.drawElementsInstanced(i, c, a === void 0 ? Gt : t.elementType, r, o) : e.drawElements(i, c, a === void 0 ? Gt : t.elementType, r) : o !== void 0 ? e.drawArraysInstanced(i, r, c, o) : e.drawArrays(i, r, c);
 }
 function vr(e, t) {
   t = t || 1, t = Math.max(0, t);
@@ -1342,8 +1342,11 @@ class Tr {
   create() {
     this.data = this.params[this.preset], this.quad = new wr(this.gl, this.data);
   }
+  setNewParams(t) {
+    this.params = t, this.applyPreset(this.preset);
+  }
   applyPreset(t) {
-    this.data = this.params[t], this.quad.applyPreset(this.data);
+    this.preset = t, this.data = this.params[t], this.quad.applyPreset(this.data);
   }
   render(t, i) {
     this.quad && this.quad.render(t, this.mouse);
@@ -1870,19 +1873,19 @@ class Ur extends O {
     }, o = (p) => {
       this._inputFocused && (p.preventDefault(), n(this._step * this._normalizeMouseWheel(p)));
     };
-    let s = !1, a, l, c, f, u;
+    let s = !1, a, c, l, f, u;
     const h = 5, d = (p) => {
-      a = p.clientX, l = c = p.clientY, s = !0, f = this.getValue(), u = 0, window.addEventListener("mousemove", v), window.addEventListener("mouseup", A);
+      a = p.clientX, c = l = p.clientY, s = !0, f = this.getValue(), u = 0, window.addEventListener("mousemove", v), window.addEventListener("mouseup", A);
     }, v = (p) => {
       if (s) {
-        const y = p.clientX - a, b = p.clientY - l;
+        const y = p.clientX - a, b = p.clientY - c;
         Math.abs(b) > h ? (p.preventDefault(), this.$input.blur(), s = !1, this._setDraggingStyle(!0, "vertical")) : Math.abs(y) > h && A();
       }
       if (!s) {
-        const y = p.clientY - c;
+        const y = p.clientY - l;
         u -= y * this._step * this._arrowKeyMultiplier(p), f + u > this._max ? u = this._max - f : f + u < this._min && (u = this._min - f), this._snapClampSetValue(f + u);
       }
-      c = p.clientY;
+      l = p.clientY;
     }, A = () => {
       this._setDraggingStyle(!1, "vertical"), this._callOnFinishChange(), window.removeEventListener("mousemove", v), window.removeEventListener("mouseup", A);
     }, _ = () => {
@@ -1905,15 +1908,15 @@ class Ur extends O {
     }, o = () => {
       this._callOnFinishChange(), this._setDraggingStyle(!1), window.removeEventListener("mousemove", r), window.removeEventListener("mouseup", o);
     };
-    let s = !1, a, l;
-    const c = (g) => {
+    let s = !1, a, c;
+    const l = (g) => {
       g.preventDefault(), this._setDraggingStyle(!0), i(g.touches[0].clientX), s = !1;
     }, f = (g) => {
-      g.touches.length > 1 || (this._hasScrollBar ? (a = g.touches[0].clientX, l = g.touches[0].clientY, s = !0) : c(g), window.addEventListener("touchmove", u, { passive: !1 }), window.addEventListener("touchend", h));
+      g.touches.length > 1 || (this._hasScrollBar ? (a = g.touches[0].clientX, c = g.touches[0].clientY, s = !0) : l(g), window.addEventListener("touchmove", u, { passive: !1 }), window.addEventListener("touchend", h));
     }, u = (g) => {
       if (s) {
-        const p = g.touches[0].clientX - a, y = g.touches[0].clientY - l;
-        Math.abs(p) > Math.abs(y) ? c(g) : (window.removeEventListener("touchmove", u), window.removeEventListener("touchend", h));
+        const p = g.touches[0].clientX - a, y = g.touches[0].clientY - c;
+        Math.abs(p) > Math.abs(y) ? l(g) : (window.removeEventListener("touchmove", u), window.removeEventListener("touchend", h));
       } else
         g.preventDefault(), i(g.touches[0].clientX);
     }, h = () => {
@@ -2481,16 +2484,16 @@ class Bt {
     title: o = "Controls",
     closeFolders: s = !1,
     injectStyles: a = !0,
-    touchStyles: l = !0
+    touchStyles: c = !0
   } = {}) {
-    if (this.parent = t, this.root = t ? t.root : this, this.children = [], this.controllers = [], this.folders = [], this._closed = !1, this._hidden = !1, this.domElement = document.createElement("div"), this.domElement.classList.add("lil-gui"), this.$title = document.createElement("div"), this.$title.classList.add("title"), this.$title.setAttribute("role", "button"), this.$title.setAttribute("aria-expanded", !0), this.$title.setAttribute("tabindex", 0), this.$title.addEventListener("click", () => this.openAnimated(this._closed)), this.$title.addEventListener("keydown", (c) => {
-      (c.code === "Enter" || c.code === "Space") && (c.preventDefault(), this.$title.click());
+    if (this.parent = t, this.root = t ? t.root : this, this.children = [], this.controllers = [], this.folders = [], this._closed = !1, this._hidden = !1, this.domElement = document.createElement("div"), this.domElement.classList.add("lil-gui"), this.$title = document.createElement("div"), this.$title.classList.add("title"), this.$title.setAttribute("role", "button"), this.$title.setAttribute("aria-expanded", !0), this.$title.setAttribute("tabindex", 0), this.$title.addEventListener("click", () => this.openAnimated(this._closed)), this.$title.addEventListener("keydown", (l) => {
+      (l.code === "Enter" || l.code === "Space") && (l.preventDefault(), this.$title.click());
     }), this.$title.addEventListener("touchstart", () => {
     }, { passive: !0 }), this.$children = document.createElement("div"), this.$children.classList.add("children"), this.domElement.appendChild(this.$title), this.domElement.appendChild(this.$children), this.title(o), this.parent) {
       this.parent.children.push(this), this.parent.folders.push(this), this.parent.$children.appendChild(this.domElement);
       return;
     }
-    this.domElement.classList.add("root"), l && this.domElement.classList.add("allow-touch-styles"), !Ht && a && (Gr(Vr), Ht = !0), n ? n.appendChild(this.domElement) : i && (this.domElement.classList.add("autoPlace"), document.body.appendChild(this.domElement)), r && this.domElement.style.setProperty("--width", r + "px"), this._closeFolders = s;
+    this.domElement.classList.add("root"), c && this.domElement.classList.add("allow-touch-styles"), !Ht && a && (Gr(Vr), Ht = !0), n ? n.appendChild(this.domElement) : i && (this.domElement.classList.add("autoPlace"), document.body.appendChild(this.domElement)), r && this.domElement.style.setProperty("--width", r + "px"), this._closeFolders = s;
   }
   /**
    * Adds a controller to the GUI, inferring controller type using the `typeof` operator.
@@ -2774,48 +2777,84 @@ class Bt {
   }
 }
 const Hr = Bt;
-class Xr {
-  constructor(t, i, n) {
-    kt(this, "presets", {
-      "Preset 0": () => {
-        this.gl.applyPreset(0), this.initGui(this.params[0]);
-      },
-      "Preset 1": () => {
-        this.gl.applyPreset(1), this.initGui(this.params[1]);
-      }
-    });
-    this.params = t, this.call = {
-      mode: (r) => {
-        console.log("light mode", r), this.gl.scene.quad.mode(r);
-      },
-      swap: (r, o = { d: 0 }) => {
-        console.log("swap", r, o), this.gl.scene.quad.swap(r, o);
-      }
-    }, this.gl = new Ir("c", t, i), this.gl.applyPreset(0), n && this.initGui(t[i]);
+(() => {
+  class e {
+    constructor(r, o, s) {
+      kt(this, "presets", {
+        "Preset 0": () => {
+          this.gl.applyPreset(0), this.initGui(this.params[0]);
+        },
+        "Preset 1": () => {
+          this.gl.applyPreset(1), this.initGui(this.params[1]);
+        }
+      });
+      this.params = r, this.call = {
+        mode: (a) => {
+          console.log("light mode", a), this.gl.scene.quad.mode(a);
+        },
+        swap: (a, c = { d: 0 }) => {
+          console.log("swap", a, c), this.gl.scene.quad.swap(a, c);
+        }
+      }, this.gl = new Ir("c", r, o), this.gl.applyPreset(0), s && this.initGui(r[o]);
+    }
+    setNewParams(r) {
+      this.params = r, this.gl.scene.setNewParams(r);
+    }
+    setUniforms() {
+      this.gl.scene.quad.setUniforms();
+    }
+    initGui(r) {
+      this.data = r, this.gui = new Hr(), this.gui.add(this.presets, "Preset 0"), this.gui.add(this.presets, "Preset 1"), this.gui.add(this.data, "multx", 0, 10).onChange(() => {
+        this.setUniforms();
+      }).listen(), this.gui.add(this.data, "multy", 0, 10).onChange(() => {
+        this.setUniforms();
+      }).listen(), this.gui.add(this.data, "hue", 0, 1).onChange(() => {
+        this.setUniforms();
+      }).listen(), this.gui.add(this.data, "brightness", 0, 1, 0.01).onChange(() => {
+        this.setUniforms();
+      }).listen(), this.gui.add(this.data, "mouse", -1, 1).onChange(() => {
+        this.setUniforms();
+      }).listen(), this.gui.add(this.data, "scale", 0, 10).onChange(() => {
+        this.setUniforms();
+      }).listen(), this.gui.add(this.data, "noise", 0, 10).onChange(() => {
+        this.setUniforms();
+      }).listen(), this.gui.add(this.data, "bw", 0, 1).onChange(() => {
+        this.setUniforms();
+      }).listen(), this.gui.add(this.data, "time", 0, 1);
+    }
   }
-  setUniforms() {
-    this.gl.scene.quad.setUniforms();
-  }
-  initGui(t) {
-    this.data = t, this.gui = new Hr(), this.gui.add(this.presets, "Preset 0"), this.gui.add(this.presets, "Preset 1"), this.gui.add(this.data, "multx", 0, 10).onChange(() => {
-      this.setUniforms();
-    }).listen(), this.gui.add(this.data, "multy", 0, 10).onChange(() => {
-      this.setUniforms();
-    }).listen(), this.gui.add(this.data, "hue", 0, 1).onChange(() => {
-      this.setUniforms();
-    }).listen(), this.gui.add(this.data, "brightness", 0, 1, 0.01).onChange(() => {
-      this.setUniforms();
-    }).listen(), this.gui.add(this.data, "mouse", -1, 1).onChange(() => {
-      this.setUniforms();
-    }).listen(), this.gui.add(this.data, "scale", 0, 10).onChange(() => {
-      this.setUniforms();
-    }).listen(), this.gui.add(this.data, "noise", 0, 10).onChange(() => {
-      this.setUniforms();
-    }).listen(), this.gui.add(this.data, "bw", 0, 1).onChange(() => {
-      this.setUniforms();
-    }).listen(), this.gui.add(this.data, "time", 0, 1);
-  }
-}
-export {
-  Xr as Gradient
-};
+  let t = {
+    0: {
+      multx: 0.2,
+      multy: 0.8,
+      hue: 0,
+      brightness: 0.74,
+      mouse: 1,
+      scale: 0.29,
+      scale2: 0.2,
+      noise: 1,
+      color: [0, 0.33, 0.66],
+      color2: [0, 0, 0],
+      bw: 1,
+      bw2: 1,
+      time: 0.5
+    },
+    1: {
+      multx: 0.2,
+      multy: 0.8,
+      hue: 0,
+      brightness: 0.8,
+      mouse: 1,
+      scale: 0.2,
+      scale2: 0.2,
+      noise: 1,
+      color: [0, 0.33, 0.66],
+      color2: [0, 0, 0],
+      bw: 0,
+      bw2: 0,
+      time: 1
+    }
+  };
+  const i = new e(t, 0, !0);
+  window.gradient = i, window.Gradient = i;
+})();

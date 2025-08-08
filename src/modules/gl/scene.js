@@ -28,8 +28,14 @@ export default class {
     this.quad = new Quad(this.gl, this.data);
   }
 
-  applyPreset(preset) { 
+  setNewParams(params) {
+    this.params = params;
+    this.applyPreset(this.preset);
+  }
 
+  applyPreset(preset) {
+
+    this.preset = preset;
     this.data = this.params[preset];
     this.quad.applyPreset(this.data);
 
