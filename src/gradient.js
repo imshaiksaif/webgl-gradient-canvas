@@ -29,15 +29,23 @@ class Gradient {
   presets = {
     "Preset 0": () => {
       // this.gl.applyPreset(0)
-
+      window.Gradient.gl.scene.quad.tweenTo(params[0], 1000);
       this.initGui( this.params[0] );
     },
     "Preset 1": () => {
       // this.gl.applyPreset(1)
-
-      window.Gradient.gl.scene.quad.tweenTo(params[1]);
-
+      window.Gradient.gl.scene.quad.tweenTo(params[1], 1000);
       this.initGui( this.params[1] );
+    },
+    "Preset 2": () => {
+      // this.gl.applyPreset(1)
+      window.Gradient.gl.scene.quad.tweenTo(params[2], 1000);
+      this.initGui( this.params[2] );
+    },
+    "Preset 3": () => {
+      // this.gl.applyPreset(1)
+      window.Gradient.gl.scene.quad.tweenTo(params[3], 1000);
+      this.initGui( this.params[3] );
     }
   }
 
@@ -49,6 +57,8 @@ class Gradient {
   }
 
   setUniforms() {
+
+    this.gl.scene.quad.data = this.data;
     this.gl.scene.quad.setUniforms();        
   }
 
@@ -57,6 +67,8 @@ class Gradient {
     this.gui = new GUI();
     this.gui.add(this.presets, "Preset 0")
     this.gui.add(this.presets, "Preset 1")
+    this.gui.add(this.presets, "Preset 2")
+    this.gui.add(this.presets, "Preset 3")
     this.gui
       .add(this.data, "multx", 0, 10)
       .onChange(() => {this.setUniforms();}).listen();
@@ -103,16 +115,46 @@ let params = {
       hue: 0,
       brightness: 0.74,
       mouse: 1,
-      scale: 1.15,
+      scale: 0.9,
       scale2: 0.2,
       noise: 3.6,
-      color: '#808080',
+      color: '#b0b0b0',
       color2:  '#a25820',
       bw: 0.25,
       bw2: 0,
       time: 0.5
     },
     1: {
+      multx: 0.2,
+      multy: 0.8,
+      hue: 0,
+      brightness: 0.8,
+      mouse: 0.53,
+      scale: 1.15,
+      scale2: 0.4,
+      noise: 3,
+      color: '#0b218e',
+      color2: '#0a1732',
+      bw: 0.3,
+      bw2: 0,
+      time: 1
+    },
+    2: {
+      multx: 0.2,
+      multy: 0.8,
+      hue: 0,
+      brightness: 0.8,
+      mouse: 0.53,
+      scale: 1.15,
+      scale2: 0.4,
+      noise: 3,
+      color: '#0b218e',
+      color2: '#0a1732',
+      bw: 0.3,
+      bw2: 0,
+      time: 1
+    },
+    3: {
       multx: 0.2,
       multy: 0.8,
       hue: 0,

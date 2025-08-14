@@ -47,7 +47,7 @@ export default class {
 
   }
 
-  tweenTo(dataObj) {
+  tweenTo(dataObj, duration) {
 
     let oldData = {}
     let newData = {}
@@ -68,19 +68,27 @@ export default class {
 
         } else {
 
-          oldData[key] = this.hexToRgbObject(this.data[key])
-          newData[key] = this.hexToRgbObject(dataObj[key])
+          if ( typeof this.data[key] === 'string') {
+            oldData[key] = this.hexToRgbObject(this.data[key])
+            newData[key] = this.hexToRgbObject(dataObj[key])
+          } else
+            if (typeof this.data[key] === 'object') {
+
+              oldData[key] = this.data[key]
+              // newData[key] = this.hexToRgbObject(dataObj[key])
+
+            }
 
         }
       }
     }
-    console.log(oldData)
+    // console.log(oldData)
     console.log(newData)
 
     this.data = oldData;
 
     this.tween = new Tween(this.data)
-      .to(newData, 3000)
+      .to(newData, duration)
       .onUpdate(() => {
         // console.log(this.data.scale)
         this.setUniforms()
