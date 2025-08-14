@@ -28,9 +28,7 @@
         let defaultSettings = window.Gradient.params[0];
         window.Gradient.gl.scene.quad.tweenTo(defaultSettings, 2000);
       }
-      document.addEventListener("scroll", (event) => {
-        
-        
+      document.addEventListener("scroll", (event) => {        
         var scrollTop = window.scrollY; // Current vertical scroll position
         var documentHeight = document.documentElement.scrollHeight; // Total height of the document
         var windowHeight = window.innerHeight; // Height of the visible window (viewport)
@@ -43,9 +41,7 @@
 
         if (window.Gradient)
           window.Gradient.setUniform( "bw", scrollPercent );
-
       })
-
     </script>
 
     
