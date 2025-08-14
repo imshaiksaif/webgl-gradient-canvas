@@ -33,6 +33,7 @@ class Gradient {
     },
     "Preset 1": () => {
       this.gl.applyPreset(1)
+      window.Gradient.call.swap(null, { d: 1.2 });
       this.initGui( this.params[1] );
     }
   }
@@ -59,6 +60,14 @@ class Gradient {
     this.gui
       .add(this.data, "multy", 0, 10)
       .onChange(() => {this.setUniforms();}).listen();
+
+      this.gui
+      .addColor(this.data, "color")
+      .onChange(() => {this.setUniforms();}).listen();
+      this.gui
+      .addColor(this.data, "color2")
+      .onChange(() => {this.setUniforms();}).listen();
+
     this.gui
       .add(this.data, "hue", 0, 1)
       .onChange(() => {this.setUniforms();}).listen();
@@ -77,6 +86,9 @@ class Gradient {
     this.gui
       .add(this.data, "bw", 0, 1)
       .onChange(() => {this.setUniforms();}).listen();
+    this.gui
+      .add(this.data, "bw2", 0, 1)
+      .onChange(() => {this.setUniforms();}).listen();
     this.gui.add(this.data, "time", 0, 1);
   }
 }  
@@ -88,13 +100,13 @@ let params = {
       hue: 0,
       brightness: 0.74,
       mouse: 1,
-      scale: 0.29,
+      scale: 1.15,
       scale2: 0.2,
-      noise: 1,
-      color: [0.0, 0.33, 0.66],
-      color2: [0.0, 0.0, 0.0],
-      bw: 1,
-      bw2: 1,
+      noise: 3.6,
+      color: '#808080',
+      color2:  '#a25820',
+      bw: 0.25,
+      bw2: 0,
       time: 0.5
     },
     1: {
@@ -102,13 +114,13 @@ let params = {
       multy: 0.8,
       hue: 0,
       brightness: 0.8,
-      mouse: 1,
-      scale: 0.2,
-      scale2: 0.2,
-      noise: 1,
-      color: [0.0, 0.33, 0.66],
-      color2: [0.0, 0.0, 0.0],
-      bw: 0,
+      mouse: 0.53,
+      scale: 1.15,
+      scale2: 0.4,
+      noise: 3,
+      color: '#0b218e',
+      color2: '#0a1732',
+      bw: 0.3,
       bw2: 0,
       time: 1
     }

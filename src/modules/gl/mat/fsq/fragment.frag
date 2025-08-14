@@ -51,6 +51,14 @@ vec3 hueShift( vec3 color, float hueAdjust ){
 
 }
 
+vec3 colorShift( vec3 color, vec3 color2, float time ) {
+
+  vec3 cmix = mix(color, color2, time);
+
+  return cmix;
+
+}
+
 // noise
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
@@ -161,11 +169,15 @@ void main() {
   scale_uv += vec2(.5);
 
   // # COMPUTE
+
   vec3 current_color = mix(u_color, u_color2, u_swap);
+
   vec3 col = palette(
     u_time + cos((m_uv.x) + (m_uv.y)), 
     col1, col2, col2, current_color
   );
+
+  col = current_color;
 
   // mouse 
   float dist = distance(m_uv, u_mouse * SCALE/2.);
@@ -174,7 +186,8 @@ void main() {
   dist = smoothstep(.3, 1., dist);
 
 
-  vec3 shift_col = hueShift(col, sin(u_time * MPI));
+  vec3 shift_col = colorShift(u_color, u_color2, sin(u_time * MPI));
+     // hueShift(col, sin(u_time * MPI));
 
   col = mix(
     col, 
@@ -184,10 +197,13 @@ void main() {
 
  
   // final shift
-  col = hueShift(col, HUE);
+  //col = hueShift(col, HUE);
   col *= BRIGHTNESS;
 
   float bw_col = (col.r + col.g + col.b) * .3;
+
+  float bw_mix = BW * ( u_time + cos((m_uv.x) + (m_uv.y)) );
+
   col = mix(col, vec3(bw_col), BW);
 
   // col.r = u_mode - col.r;

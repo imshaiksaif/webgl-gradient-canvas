@@ -45,15 +45,38 @@ export default class {
 
   }
 
+  hexToRgb(hex) {
+    // Remove '#' if present
+    let hexValue = hex.startsWith('#') ? hex.slice(1) : hex;
+
+    // Handle shorthand hex codes (e.g., #abc)
+    if (hexValue.length === 3) {
+      hexValue = hexValue[0] + hexValue[0] + 
+                hexValue[1] + hexValue[1] + 
+                hexValue[2] + hexValue[2];
+    }
+
+    // Parse the R, G, and B components
+    const r = parseInt(hexValue.substring(0, 2), 16) / 255;
+    const g = parseInt(hexValue.substring(2, 4), 16) / 255;
+    const b = parseInt(hexValue.substring(4, 6), 16) / 255;
+
+    return [ r, g, b ]; // Returns an object with r, g, b properties
+  }
+
   setUniforms() {
+
+    let color = this.hexToRgb(this.data.color);
+    let color2 = this.hexToRgb(this.data.color2);
+
     this.uniforms = {
       u_res: [this.gl.canvas.width, this.gl.canvas.height],
       u_time: 0,
       u_params: [this.data.multx, this.data.multy, this.data.hue, this.data.brightness],
       u_params2: [this.data.mouse, this.data.scale, this.data.noise, this.data.bw],
       u_altparams: [this.data.scale2, this.data.bw2, 0, 0],
-      u_color: this.data.color,
-      u_color2: this.data.color2,
+      u_color: color,
+      u_color2: color2,
       u_mode: this.a.mode,
       u_swap: this.a.swap
     };
