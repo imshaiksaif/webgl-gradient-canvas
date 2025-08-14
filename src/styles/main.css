@@ -17,7 +17,7 @@ canvas {
 #c {
   width:100vw;
   height:2000px;
-  /* position:fixed; */
+  position:absolute;
   top:0;
   left:0;
   z-index: -1;

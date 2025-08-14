@@ -17,6 +17,8 @@
       TEST BUTTON
     </button>
 
+    <script src="dist/gradient-lib.js" type="module"></script>
+
     <script>
       function onMouseHover(e) {
         let hoverSettings = window.Gradient.params[1];
@@ -40,14 +42,13 @@
         var scrollPercent = (scrollTop / scrollableDistance);
 
         if (window.Gradient)
-          window.Gradient.setUniform( "bw", scrollPercent );      
-
+          window.Gradient.setUniform( "bw", scrollPercent );
 
       })
 
     </script>
 
-    <script src="src/gradient.js" type="module"></script>
+    
   </body>
 
 </html>
