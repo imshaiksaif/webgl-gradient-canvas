@@ -1,4 +1,8 @@
 
+html, body {
+  overflow: scroll;
+}
+
 * {
   margin:0;
   padding:0;
@@ -7,15 +11,17 @@
 }
 canvas {
   display:block;
+  overflow: scroll;
 }
 
 #c {
   width:100vw;
-  height:100vh;
-  position:fixed;
+  height:2000px;
+  /* position:fixed; */
   top:0;
   left:0;
   z-index: -1;
+  overflow: scroll;
 }
 
 /* Project Styles */
@@ -23,8 +29,8 @@ canvas {
 #content {
   /* border: 3px solid red; */
   width:100vw;
-  height:100vh;
-  position:fixed;
+  /* height:100vh; */
+  /* position:fixed; */
   top:0;
   left:0;
   z-index: 1;

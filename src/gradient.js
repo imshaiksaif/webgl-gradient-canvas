@@ -8,6 +8,8 @@ class Gradient {
 
     this.params = params;
 
+    this.preset = preset;
+
     this.call = {
       mode: (name) => {
         console.log("light mode", name);
@@ -49,15 +51,38 @@ class Gradient {
     }
   }
 
-  setNewParams(params) {
+  tweenTo(preset, duration) {
 
-    this.params = params;
-    this.gl.scene.setNewParams(params);
+    this.preset = preset;
+    thid.gl.scene.quad.tweenTo(this.params[this.preset], duration);
 
   }
 
-  setUniforms() {
+  mapRange(value, sourceMin, sourceMax, targetMin, targetMax) {
+    // Calculate the percentage of the value within the source range
+    const percentage = (value - sourceMin) / (sourceMax - sourceMin);
 
+    // Map this percentage to the target range
+    const mappedValue = percentage * (targetMax - targetMin) + targetMin;
+
+    return mappedValue;
+  }
+
+  setUniform( key, percent ) {
+
+    let value = this.params[this.preset][key];
+    let mappedValue = this.mapRange(percent, 0, 1, value, 1);
+    // console.log(mappedValue)
+    this.gl.scene.quad.setUniform( key, mappedValue );
+
+  }
+
+  setNewParams(params) {
+    this.params = params;
+    this.gl.scene.setNewParams(params);
+  }
+
+  setUniforms() {
     this.gl.scene.quad.data = this.data;
     this.gl.scene.quad.setUniforms();        
   }
@@ -114,7 +139,7 @@ let params = {
       multy: 0.8,
       hue: 0,
       brightness: 0.74,
-      mouse: 1,
+      mouse: 0.7,
       scale: 0.9,
       scale2: 0.2,
       noise: 1.05,
@@ -140,19 +165,19 @@ let params = {
       time: 0.45
     },
     2: {
-      multx: 0.2,
+      multx: 1.2,
       multy: 0.8,
       hue: 0,
-      brightness: 0.8,
+      brightness: 0.7,
       mouse: 0.53,
-      scale: 1.15,
-      scale2: 0.4,
-      noise: 3,
+      scale: 1,
+      scale2: 0.0,
+      noise: 0.4,
       color: '#0b218e',
       color2: '#0a1732',
       bw: 0.3,
       bw2: 0,
-      time: 1
+      time: 0
     },
     3: {
       multx: 0.2,
@@ -176,15 +201,4 @@ let params = {
   window.gradient = gradient;
   window.Gradient = gradient;
 
-  function onMouseHover(e) {
-    alert("HO")
-  }
-
 })();
-
-/** Interface */
-// console.log(window.Gradient.call.mode("light"));
-
-// document.onclick = () => {
-//   window.Gradient.call.swap(null, { d: 1.2 });
-// };

@@ -147,6 +147,16 @@ export default class {
 
   }
 
+  setUniform( key, value ) {
+
+    // this.data[key] = value;
+    this.uniforms.u_bw = value;
+
+    this.gl.useProgram(this.programInfo.program);
+    setUniforms(this.programInfo, this.uniforms);
+
+  }
+
   setUniforms() {
 
     let color, color2;
@@ -166,8 +176,9 @@ export default class {
       u_res: [this.gl.canvas.width, this.gl.canvas.height],
       u_time: 0,
       u_params: [this.data.multx, this.data.multy, this.data.hue, this.data.brightness],
-      u_params2: [this.data.mouse, this.data.scale, this.data.noise, this.data.bw],
+      u_params2: [this.data.mouse, this.data.scale, this.data.noise],
       u_altparams: [this.data.scale2, this.data.bw2, 0, 0],
+      u_bw: this.data.bw,
       u_color: color,
       u_color2: color2,
       u_mode: this.a.mode,
