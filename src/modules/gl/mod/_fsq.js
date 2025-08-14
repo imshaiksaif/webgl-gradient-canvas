@@ -66,17 +66,21 @@ export default class {
           oldData[key] = this.data[key];
           newData[key] = dataObj[key];
 
-        } else {
+        } else {  // If color values in HEX or Object
 
           if ( typeof this.data[key] === 'string') {
             oldData[key] = this.hexToRgbObject(this.data[key])
-            newData[key] = this.hexToRgbObject(dataObj[key])
           } else
             if (typeof this.data[key] === 'object') {
 
               oldData[key] = this.data[key]
-              // newData[key] = this.hexToRgbObject(dataObj[key])
+            }
 
+          if ( typeof dataObj[key] === 'string') {
+            newData[key] = this.hexToRgbObject(dataObj[key])
+          } else
+            if (typeof this.data[key] === 'object') {
+              // newData[key] = this.hexToRgbObject(dataObj[key])
             }
 
         }

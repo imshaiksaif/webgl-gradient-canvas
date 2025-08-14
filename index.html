@@ -12,6 +12,22 @@
     <main></main>
     <canvas id="c"></canvas>
 
+    <button id="testButton" onmouseenter="onMouseHover()" onmouseleave="onMouseHoverOut()"
+      style="width: 200px; height: 60px; position: absolute; margin: 10px;">
+      TEST BUTTON
+    </button>
+
+    <script>
+      function onMouseHover(e) {
+        let hoverSettings = window.Gradient.params[1];
+        window.Gradient.gl.scene.quad.tweenTo(hoverSettings, 1000);
+      }
+      function onMouseHoverOut(e) {
+        let defaultSettings = window.Gradient.params[0];
+        window.Gradient.gl.scene.quad.tweenTo(defaultSettings, 1000);
+      }
+    </script>
+
     <script src="src/gradient.js" type="module"></script>
   </body>
 

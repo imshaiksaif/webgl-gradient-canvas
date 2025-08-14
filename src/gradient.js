@@ -117,12 +117,12 @@ let params = {
       mouse: 1,
       scale: 0.9,
       scale2: 0.2,
-      noise: 3.6,
+      noise: 1.05,
       color: '#b0b0b0',
       color2:  '#a25820',
       bw: 0.25,
       bw2: 0,
-      time: 0.5
+      time: 0.25
     },
     1: {
       multx: 0.2,
@@ -130,14 +130,14 @@ let params = {
       hue: 0,
       brightness: 0.8,
       mouse: 0.53,
-      scale: 1.15,
+      scale: 0.9,
       scale2: 0.4,
       noise: 3,
       color: '#0b218e',
       color2: '#0a1732',
       bw: 0.3,
       bw2: 0,
-      time: 1
+      time: 0.45
     },
     2: {
       multx: 0.2,
@@ -175,6 +175,10 @@ let params = {
 
   window.gradient = gradient;
   window.Gradient = gradient;
+
+  function onMouseHover(e) {
+    alert("HO")
+  }
 
 })();
 
