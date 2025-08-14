@@ -28,12 +28,15 @@ class Gradient {
 
   presets = {
     "Preset 0": () => {
-      this.gl.applyPreset(0)
+      // this.gl.applyPreset(0)
+
       this.initGui( this.params[0] );
     },
     "Preset 1": () => {
-      this.gl.applyPreset(1)
-      window.Gradient.call.swap(null, { d: 1.2 });
+      // this.gl.applyPreset(1)
+
+      window.Gradient.gl.scene.quad.tweenTo(params[1]);
+
       this.initGui( this.params[1] );
     }
   }
