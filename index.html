@@ -23,12 +23,12 @@
       function onMouseHover(e) {
         let hoverSettings = window.Gradient.params[1];
         window.Gradient.gl.scene.quad.tweenTo(hoverSettings, 1000);
-      } 
+      }
       function onMouseHoverOut(e) {
         let defaultSettings = window.Gradient.params[0];
         window.Gradient.gl.scene.quad.tweenTo(defaultSettings, 2000);
       }
-      document.addEventListener("scroll", (event) => {        
+        document.addEventListener("scroll", (event) => {
         var scrollTop = window.scrollY; // Current vertical scroll position
         var documentHeight = document.documentElement.scrollHeight; // Total height of the document
         var windowHeight = window.innerHeight; // Height of the visible window (viewport)
@@ -44,7 +44,7 @@
       })
     </script>
 
-    
+
   </body>
 
 </html>

@@ -31,6 +31,10 @@ export default class {
     // };
 
     this.canvas = document.getElementById(canvasId);
+    if(!this.canvas) {
+      console.error(`Canvas with id "${canvasId}" not found.`);
+      return;
+    }
     this.gl = this.canvas.getContext("webgl");
     this.gl.clearColor(0.04, 0.04, 0.04, 1);
     this.gl.vp = { dpr: Math.min(window.devicePixelRatio, 2) };

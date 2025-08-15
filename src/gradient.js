@@ -5,6 +5,7 @@ import GUI from "lil-gui";
 
 class Gradient {
   constructor(params, preset, isTest) {
+    this.canvasGradientId = window.gradientCanvasId || "gradient-canvas";
 
     this.params = params;
 
@@ -19,9 +20,9 @@ class Gradient {
         console.log("swap", name, params);
         this.gl.scene.quad.swap(name, params);
       }
-    };    
+    };
 
-    this.gl = new Gl("c", params, preset);
+    this.gl = new Gl(this.canvasGradientId, params, preset);
 
     this.gl.applyPreset(0);
 
@@ -84,7 +85,7 @@ class Gradient {
 
   setUniforms() {
     this.gl.scene.quad.data = this.data;
-    this.gl.scene.quad.setUniforms();        
+    this.gl.scene.quad.setUniforms();
   }
 
   initGui(data) {
@@ -131,7 +132,7 @@ class Gradient {
       .onChange(() => {this.setUniforms();}).listen();
     this.gui.add(this.data, "time", 0, 1);
   }
-}  
+}
 
 let params = {
     0: {
