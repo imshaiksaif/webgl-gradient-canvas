@@ -26,6 +26,7 @@ class GradientCanvas {
     this.time = 0;
 
     console.log('Window width:', window.innerWidth, 'isMobile:', this.isMobile);
+    console.log('User Agent:', navigator.userAgent);
 
     this.init();
     this.setupEventListeners();
@@ -100,22 +101,37 @@ class GradientCanvas {
         // Mouse interaction (desktop only) - creates dynamic gradient shift
         float mouseInfluence = 0.0;
         if (u_isMobile < 0.5) {
-          // Create a gradient that follows the mouse position
+          // Create a more directional gradient influence instead of circular
           vec2 mouseOffset = st - mouse;
-          float mouseDistance = length(mouseOffset);
-
-          // Smaller influence area and reduced strength
-          mouseInfluence = smoothstep(0.5, 0.0, mouseDistance) * 0.25;
-
-          // Reduced directional influence for subtler effect
-          float directionalInfluence = (mouse.x - 0.5) * 0.1 + (mouse.y - 0.5) * 0.08;
+          
+          // Reduced directional influence to prevent extreme contrasts
+          float directionalInfluence = (mouse.x - 0.5) * 0.2 + (mouse.y - 0.5) * 0.15;
           baseGradient += directionalInfluence;
+          
+          // Add subtle radial component for local variation
+          float mouseDistance = length(mouseOffset);
+          float radialInfluence = smoothstep(0.4, 0.0, mouseDistance) * 0.15;
+          
+          // Reduced flow influence to maintain overall balance
+          float flowX = (st.x - mouse.x) * (mouse.y - 0.5) * 0.1;
+          float flowY = (st.y - mouse.y) * (mouse.x - 0.5) * 0.08;
+          
+          mouseInfluence = radialInfluence + flowX + flowY;
         }
 
-        // Mobile animation - slow and more visible
+        // Mobile animation - slow, organic movement
         if (u_isMobile > 0.5) {
-          float slowTime = u_time * 0.2; // Slightly faster for visibility
-          float mobileAnimation = sin(slowTime) * 0.15 + cos(slowTime * 0.7) * 0.1;
+          float slowTime = u_time * 0.25; // Faster for more visible movement
+          
+          // Create organic breathing pattern with multiple frequencies
+          float wave1 = sin(slowTime) * 0.12;
+          float wave2 = cos(slowTime * 0.7) * 0.08;
+          float wave3 = sin(slowTime * 1.3) * 0.05; // Add subtle variation
+          
+          // Add slight positional variation for more natural feel
+          float posVariation = sin(st.x * 2.0 + slowTime * 0.5) * 0.02;
+          
+          float mobileAnimation = wave1 + wave2 + wave3 + posVariation;
           baseGradient += mobileAnimation;
         }
 
@@ -230,10 +246,10 @@ class GradientCanvas {
     const gl = this.gl;
     this.time += 0.016; // ~60fps
 
-    // Smooth mouse interpolation - smoother and more gradual
+    // More responsive mouse interpolation - less easing
     if (!this.isMobile) {
-      this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.04;
-      this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.04;
+      this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.12;
+      this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.12;
     } else {
       // Keep mouse centered on mobile
       this.mouse.x = 0.5;
