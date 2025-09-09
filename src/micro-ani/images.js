@@ -135,7 +135,7 @@ function createImageReveal(selector, options = {}) {
 // Auto-initialize common elements
 function initImageReveal() {
   // Auto-reveal project images
-  createImageReveal('.page-wrapper img', {
+  createImageReveal('img:not([ss-dont-animate])', {
     animationType: 'blur',
     duration: 1.5,
     ease: "power3.out"
