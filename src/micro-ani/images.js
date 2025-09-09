@@ -134,21 +134,18 @@ function createImageReveal(selector, options = {}) {
 
 // Auto-initialize common elements
 function initImageReveal() {
-  // Auto-reveal elements with data attribute
-  createImageReveal('[data-reveal="image"]');
-
   // Auto-reveal project images
-  createImageReveal('.project-image', {
+  createImageReveal('.page-wrapper img', {
     animationType: 'blur',
     duration: 1.5,
     ease: "power3.out"
   });
 
-  // Auto-reveal other gallery images
-  createImageReveal('.gallery img, .gallery-grid img:not(.project-image)', {
-    animationType: 'slide',
-    duration: 1.2
-  });
+  // // Auto-reveal other gallery images
+  // createImageReveal('.gallery img, .gallery-grid img:not(.project-image)', {
+  //   animationType: 'slide',
+  //   duration: 1.2
+  // });
 }
 
 // Initialize when DOM is ready
