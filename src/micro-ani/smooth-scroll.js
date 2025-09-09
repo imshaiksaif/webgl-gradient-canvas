@@ -48,7 +48,7 @@ class SmoothScroll {
   init() {
     // Check if we should disable on mobile
     this.checkMobile();
-    
+
     if (this.isMobile && this.options.disableOnMobile) {
       this.log('Smooth scroll disabled on mobile');
       return;
@@ -93,7 +93,7 @@ class SmoothScroll {
 
   initWithLenis() {
     this.log('Initializing with Lenis smooth scroll');
-    
+
     // Initialize Lenis
     this.lenis = new Lenis({
       duration: 1.2,
@@ -119,6 +119,9 @@ class SmoothScroll {
       requestAnimationFrame(raf);
       this.log('Lenis initialized without GSAP');
     }
+
+    // Setup image load listeners for height recalculation
+    this.setupImageLoadListeners();
   }
 
   initCustomSmooth() {
@@ -132,7 +135,82 @@ class SmoothScroll {
     this.log('Initializing custom smooth scroll');
     this.setupDOM();
     this.bindEvents();
+    this.setupImageLoadListeners();
     this.startRAF();
+  }
+
+  setupImageLoadListeners() {
+    // Find all images on the page
+    const images = document.querySelectorAll('img');
+    const totalImages = images.length;
+    let loadedCount = 0;
+
+    if (totalImages === 0) {
+      this.log('No images found to monitor');
+      return;
+    }
+
+    images.forEach((img, index) => {
+      // Skip if image is already loaded
+      if (img.complete && img.naturalHeight !== 0) {
+        loadedCount++;
+        return;
+      }
+
+      // Listen for load event
+      const onLoad = () => {
+        loadedCount++;
+        this.log(`Image ${index + 1}/${totalImages} loaded`);
+        
+        // Simply refresh ScrollTrigger when image loads
+        if (typeof ScrollTrigger !== 'undefined') {
+          ScrollTrigger.refresh();
+          this.log('ScrollTrigger refreshed for image load');
+        }
+        
+        // For Lenis, also trigger resize
+        if (this.lenis) {
+          this.lenis.resize();
+          this.log('Lenis resize triggered for image load');
+        }
+
+        // Clean up listener
+        img.removeEventListener('load', onLoad);
+        img.removeEventListener('error', onError);
+      };
+
+      // Listen for error event
+      const onError = () => {
+        loadedCount++;
+        this.log(`Image ${index + 1}/${totalImages} failed to load`);
+        
+        // Clean up listener
+        img.removeEventListener('load', onLoad);
+        img.removeEventListener('error', onError);
+      };
+
+      img.addEventListener('load', onLoad);
+      img.addEventListener('error', onError);
+    });
+
+    this.log(`Monitoring ${totalImages} images (${loadedCount} already loaded)`);
+  }
+
+  setupMutationObserver() {
+    // Disabled - using direct ScrollTrigger refresh on image load instead
+    this.log('Mutation observer disabled - using direct image load detection');
+  }
+
+  debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   }  checkMobile() {
     this.isMobile = window.innerWidth <= this.options.mobileBreakpoint;
     this.log(`Mobile check: ${this.isMobile ? 'Mobile' : 'Desktop'}`);
@@ -199,7 +277,7 @@ class SmoothScroll {
   }
 
   onResize() {
-    if (this.isResizing) return;
+    if (this.isResizing || this.isUpdatingHeight) return;
 
     this.isResizing = true;
 
@@ -220,6 +298,12 @@ class SmoothScroll {
   }
 
   updateScrollTrigger() {
+    // Don't refresh if we're already updating height (prevents loops)
+    if (this.isUpdatingHeight) {
+      this.log('Skipping ScrollTrigger refresh (height update in progress)');
+      return;
+    }
+    
     // Refresh ScrollTrigger if available
     if (typeof ScrollTrigger !== 'undefined') {
       ScrollTrigger.refresh();
@@ -319,6 +403,13 @@ class SmoothScroll {
       this.lenis.destroy();
       this.lenis = null;
       this.log('Lenis destroyed');
+    }
+
+    // Remove mutation observer
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
+      this.mutationObserver = null;
+      this.log('Mutation observer disconnected');
     }
 
     // Remove RAF
