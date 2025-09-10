@@ -15,10 +15,10 @@ function initLogoFadeAnimation() {
 
   // Create modern stagger animation for logo
   gsap.to(logoHolder, {
-    y: -30, // Move up by 30px
+    y: -10, // Move up by 30px
     opacity: 0,
-    scale: 0.95, // Slightly scale down for modern effect
-    duration: 0.6,
+    // scale: 0.95, // Slightly scale down for modern effect
+    duration: 0.5,
     ease: "expo.out", // Exponential ease for very modern feel
     scrollTrigger: {
       trigger: footer,
@@ -28,13 +28,13 @@ function initLogoFadeAnimation() {
       onEnter: () => {
       },
       onLeaveBack: () => {
-        // Stagger logo back in when scrolling up
+        // Simple fade logo back in when scrolling up
         gsap.to(logoHolder, {
           y: 0,
           opacity: 1,
-          scale: 1,
+          // scale: 1,
           duration: 0.4,
-          ease: "elastic.out(1, 0.5)" // Subtle elastic bounce for modern feel
+          ease: "expo.in" // Simple fade without bounce
         });
       }
     }
