@@ -27,18 +27,18 @@ const aniGlobalVars = {
 
   // Animation settings
   animations: {
-    // Timing
-    letterDuration: 0.6,
-    suffixDuration: 0.8,
-    exitDuration: 0.4,
-    exitSuffixDuration: 0.6,
-    navbarFadeDuration: 0.4, // Navbar fade timing
-    pageWrapperFadeDuration: 0.5, // Page wrapper fade timing
+    // Timing - Reduced for smoother transitions
+    letterDuration: 0.5, // Reduced from 0.6
+    suffixDuration: 0.6, // Reduced from 0.8
+    exitDuration: 0.3, // Reduced from 0.4
+    exitSuffixDuration: 0.4, // Reduced from 0.6
+    navbarFadeDuration: 0.3, // Reduced from 0.4
+    pageWrapperFadeDuration: 0.4, // Reduced from 0.5
 
-    // Stagger
-    letterStagger: 0.05,
-    exitStagger: 0.03,
-    staggerUpDelay: 0.08, // For upward stagger animation
+    // Stagger - Reduced for faster sequence
+    letterStagger: 0.04, // Reduced from 0.05
+    exitStagger: 0.02, // Reduced from 0.03
+    staggerUpDelay: 0.06, // Reduced from 0.08
 
     // Easing
     enterEase: "power2.out",
@@ -68,6 +68,15 @@ const aniGlobalVars = {
 
 // Utility functions
 const logoUtils = {
+  // Remove anti-flicker CSS after setup
+  removeAntiFlickerCSS() {
+    const style = document.getElementById('logo-animation-antiflicker');
+    if (style) {
+      style.remove();
+      logoUtils.debug('Anti-flicker CSS removed');
+    }
+  },
+
   // Get logo elements safely
   getLogoElements() {
     const logoHolder = document.querySelector(aniGlobalVars.logoHolder);
@@ -303,27 +312,40 @@ const logoAnimations = {
     if (localStorage.getItem('logoAnimationTransitioning') === 'true') {
       localStorage.removeItem('logoAnimationTransitioning');
       logoUtils.debug('Skipping transition setup - page just loaded from navigation');
-      // Still setup the basic state but don't intercept navigation immediately
+
       this.currentPath = window.location.pathname;
       this.isInitialLoad = true;
       this.isTransitioning = false;
 
-      // Setup initial state with navbar hidden for animation
+      // Setup initial state immediately
       this.setupInitialStateForTransition();
-      this.animatePageLoad();
+
+      // Remove anti-flicker CSS and start animation
+      setTimeout(() => {
+        logoUtils.removeAntiFlickerCSS();
+        this.animatePageLoad();
+      }, 50);
 
       // Delay navigation listener setup to prevent immediate conflicts
       setTimeout(() => {
         this.setupNavigationListeners();
-      }, 500);
+      }, 300);
       return;
     }
 
     this.currentPath = window.location.pathname;
     this.isInitialLoad = true;
     this.isTransitioning = false;
+
+    // Setup initial state immediately
     this.setupInitialState();
-    this.animatePageLoad();
+
+    // Remove anti-flicker CSS and start animation
+    setTimeout(() => {
+      logoUtils.removeAntiFlickerCSS();
+      this.animatePageLoad();
+    }, 50);
+
     this.setupNavigationListeners();
   },
 
@@ -541,13 +563,13 @@ const logoAnimations = {
       tl.add(animationModules.createEnterAnimation(letters));
 
       // Then apply stagger up effect with a slight delay
-      tl.add(animationModules.createStaggerUpAnimation(letters), 0.3);
+      tl.add(animationModules.createStaggerUpAnimation(letters), 0.2); // Reduced from 0.3
 
       // Fade in navbar AFTER logo animations complete
-      tl.add(animationModules.createNavbarFadeAnimation('in'), '+=0.2');
+      tl.add(animationModules.createNavbarFadeAnimation('in'), '+=0.1'); // Reduced from 0.2
 
       // Fade in page wrapper AFTER navbar fades in
-      tl.add(animationModules.createPageWrapperFadeAnimation('in'), '+=0.1');
+      tl.add(animationModules.createPageWrapperFadeAnimation('in'), '+=0.05'); // Reduced from 0.1
     } else {
       // Initial page load: stagger in animation
       logoUtils.debug('Using stagger in animation for page load with sequential animations');
@@ -555,11 +577,11 @@ const logoAnimations = {
       // Logo stagger in animation
       tl.add(animationModules.createEnterAnimation(letters));
 
-      // Fade in navbar AFTER logo animation completes
-      tl.add(animationModules.createNavbarFadeAnimation('in'), '+=0.2');
+      // Fade in navbar AFTER logo animation completes - reduced delay for smoother feel
+      tl.add(animationModules.createNavbarFadeAnimation('in'), '+=0.1'); // Reduced from 0.2
 
-      // Fade in page wrapper AFTER navbar fades in
-      tl.add(animationModules.createPageWrapperFadeAnimation('in'), '+=0.1');
+      // Fade in page wrapper AFTER navbar fades in - reduced delay
+      tl.add(animationModules.createPageWrapperFadeAnimation('in'), '+=0.05'); // Reduced from 0.1
     }    // Animate the whole suffix container
     tl.add(animationModules.createSuffixAnimation(suffix, 'in'), 0.1);
 
