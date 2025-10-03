@@ -10,19 +10,20 @@ const aniGlobalVars = {
   logoHolder: "[ss-ele='logo-holder']",
   navbar: ".homepage-nav-bar, .main-nav", // Navbar selectors
   pageWrapper: ".page-wrapper", // Page wrapper selector
+  heroSmallTitle: "[ss-ele='hero-small-title']", // Hero small title elements
 
   // SVG selectors - using data attributes would be better than IDs
-  svgElement: 'svg',
+  svgElement: "svg",
   suffixElements: '[class*="suffix"]', // Match any element with 'suffix' in class
-  betaGroup: '[id*="beta"]',          // Match any element with 'beta' in ID
+  betaGroup: '[id*="beta"]', // Match any element with 'beta' in ID
   letterElements: '[class*="letter"]', // Match any element with 'letter' in class
 
   // Page mapping - avoid hardcoded IDs
   pageMapping: {
-    '/': '[pagePath="/"]',
-    'projects': '[pagePath*="projects"]',
-    'objects': '[pagePath*="objects"]',
-    'lab': '[pagePath*="lab"]'
+    "/": '[pagePath="/"]',
+    projects: '[pagePath*="projects"]',
+    objects: '[pagePath*="objects"]',
+    lab: '[pagePath*="lab"]'
   },
 
   // Animation settings
@@ -40,19 +41,24 @@ const aniGlobalVars = {
     exitStagger: 0.02, // Reduced from 0.03
     staggerUpDelay: 0.06, // Reduced from 0.08
 
+    // Hero small title animation settings
+    heroSmallTitleFadeDuration: 0.4, // Duration for hero title fade animations
+    heroSmallTitleExitY: -20, // Y offset when hero title exits (moves up)
+    heroSmallTitleEnterDelay: 0.1, // Delay before hero title enters after starting
+
     // Easing
     enterEase: "power2.out",
     exitEase: "power2.in",
     staggerUpEase: "power2.inOut",
 
     // Transform origins
-    transformOrigin: 'bottom center',
+    transformOrigin: "bottom center",
 
     // Initial positions
-    hiddenY: '100%',
-    partialY: '50%',
+    hiddenY: "100%",
+    partialY: "50%",
     visibleY: 0,
-    staggerUpY: '-100%', // Move text completely out of view upward
+    staggerUpY: "-100%", // Move text completely out of view upward
 
     // Opacity
     hidden: 0,
@@ -291,6 +297,43 @@ const animationModules = {
         ...options
       });
     }
+  },
+
+  // Create hero small title fade animation
+  createHeroSmallTitleAnimation(direction = 'out', options = {}) {
+    const config = { ...aniGlobalVars.animations, ...options };
+    const heroSmallTitleElements = document.querySelectorAll(aniGlobalVars.heroSmallTitle);
+
+    if (heroSmallTitleElements.length === 0) {
+      logoUtils.debug('No hero small title elements found');
+      return gsap.timeline(); // Return empty timeline
+    }
+
+    if (direction === 'out') {
+      return gsap.to(heroSmallTitleElements, {
+        opacity: config.hidden,
+        y: config.heroSmallTitleExitY,
+        duration: config.heroSmallTitleFadeDuration,
+        ease: config.exitEase,
+        ...options
+      });
+    } else {
+      // Stagger down animation for 'in' direction
+      return gsap.fromTo(heroSmallTitleElements,
+        {
+          opacity: config.hidden,
+          y: config.heroSmallTitleExitY // Start from above (negative Y)
+        },
+        {
+          opacity: config.visible,
+          y: config.visibleY,
+          duration: config.heroSmallTitleFadeDuration,
+          ease: config.enterEase,
+          stagger: config.letterStagger, // Use same stagger as letters for consistency
+          ...options
+        }
+      );
+    }
   }
 };
 // Main logo animation controller
@@ -360,7 +403,7 @@ const logoAnimations = {
     // Setup suffix elements
     const suffixes = logoUtils.getSuffixElements(svg);
     animationModules.setupElements(suffixes, {
-      display: 'none',
+      display: "none",
       y: config.hiddenY,
       opacity: config.hidden
     });
@@ -379,7 +422,7 @@ const logoAnimations = {
       animationModules.setupElements(navbarElements, {
         opacity: config.hidden // Start hidden for initial page load animation
       });
-      logoUtils.debug('Navbar elements initialized as hidden for page load animation');
+      logoUtils.debug("Navbar elements initialized as hidden for page load animation");
     }
 
     // Setup page wrapper elements (initially hidden for page load animation)
@@ -388,10 +431,20 @@ const logoAnimations = {
       animationModules.setupElements(pageWrapperElements, {
         opacity: config.hidden // Start hidden for initial page load animation
       });
-      logoUtils.debug('Page wrapper elements initialized as hidden for page load animation');
+      logoUtils.debug("Page wrapper elements initialized as hidden for page load animation");
     }
 
-    logoUtils.debug('Initial state setup complete');
+    // Setup hero small title elements (initially hidden for page load animation)
+    const heroSmallTitleElements = document.querySelectorAll(aniGlobalVars.heroSmallTitle);
+    if (heroSmallTitleElements.length > 0) {
+      animationModules.setupElements(heroSmallTitleElements, {
+        opacity: config.hidden, // Start hidden for initial page load animation
+        y: config.heroSmallTitleExitY // Start at exit position for proper stagger down animation
+      });
+      logoUtils.debug("Hero small title elements initialized as hidden for page load animation");
+    }
+
+    logoUtils.debug("Initial state setup complete");
   },
 
   // Setup initial state when coming from a transition
@@ -405,7 +458,7 @@ const logoAnimations = {
     // Setup suffix elements
     const suffixes = logoUtils.getSuffixElements(svg);
     animationModules.setupElements(suffixes, {
-      display: 'none',
+      display: "none",
       y: config.hiddenY,
       opacity: config.hidden
     });
@@ -424,7 +477,7 @@ const logoAnimations = {
       animationModules.setupElements(navbarElements, {
         opacity: config.hidden // Hidden from previous page transition
       });
-      logoUtils.debug('Navbar elements initialized as hidden from previous transition');
+      logoUtils.debug("Navbar elements initialized as hidden from previous transition");
     }
 
     // Setup page wrapper elements (hidden because they should fade out during transition)
@@ -433,10 +486,26 @@ const logoAnimations = {
       animationModules.setupElements(pageWrapperElements, {
         opacity: config.hidden // Hidden from previous page transition
       });
-      logoUtils.debug('Page wrapper elements initialized as hidden from previous transition');
+      logoUtils.debug("Page wrapper elements initialized as hidden from previous transition");
     }
 
-    logoUtils.debug('Initial state setup for transition complete');
+    // Setup hero small title elements (hidden because they should fade out during transition)
+    const heroSmallTitleElements = document.querySelectorAll(aniGlobalVars.heroSmallTitle);
+    if (heroSmallTitleElements.length > 0) {
+      animationModules.setupElements(heroSmallTitleElements, {
+        opacity: config.hidden, // Hidden from previous page transition
+        y: config.heroSmallTitleExitY // Start at exit position for consistent animation
+      });
+      logoUtils.debug("Hero small title elements initialized as hidden from previous transition");
+    }
+    if (pageWrapperElements.length > 0) {
+      animationModules.setupElements(pageWrapperElements, {
+        opacity: config.hidden // Hidden from previous page transition
+      });
+      logoUtils.debug("Page wrapper elements initialized as hidden from previous transition");
+    }
+
+    logoUtils.debug("Initial state setup for transition complete");
   },
 
   // Animate on page load
@@ -557,31 +626,45 @@ const logoAnimations = {
     // Choose animation type based on context
     if (isTransition) {
       // Page transition: first animate to visible position, then stagger up
-      logoUtils.debug('Using transition animation sequence for new page with sequential animations');
+      logoUtils.debug(
+        "Using transition animation sequence for new page with sequential animations"
+      );
 
-      // First bring letters to visible position
-      tl.add(animationModules.createEnterAnimation(letters));
+      // Fade in hero small title FIRST (before letters)
+      tl.add(animationModules.createHeroSmallTitleAnimation("in"));
+
+      // Then bring letters to visible position
+      tl.add(
+        animationModules.createEnterAnimation(letters),
+        `+=${config.heroSmallTitleEnterDelay}`
+      );
 
       // Then apply stagger up effect with a slight delay
       tl.add(animationModules.createStaggerUpAnimation(letters), 0.2); // Reduced from 0.3
 
       // Fade in navbar AFTER logo animations complete
-      tl.add(animationModules.createNavbarFadeAnimation('in'), '+=0.1'); // Reduced from 0.2
+      tl.add(animationModules.createNavbarFadeAnimation("in"), "+=0.1"); // Reduced from 0.2
 
       // Fade in page wrapper AFTER navbar fades in
-      tl.add(animationModules.createPageWrapperFadeAnimation('in'), '+=0.05'); // Reduced from 0.1
+      tl.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05"); // Reduced from 0.1
     } else {
       // Initial page load: stagger in animation
-      logoUtils.debug('Using stagger in animation for page load with sequential animations');
+      logoUtils.debug("Using stagger in animation for page load with sequential animations");
 
-      // Logo stagger in animation
+      // Logo stagger in animation FIRST
       tl.add(animationModules.createEnterAnimation(letters));
 
-      // Fade in navbar AFTER logo animation completes - reduced delay for smoother feel
-      tl.add(animationModules.createNavbarFadeAnimation('in'), '+=0.1'); // Reduced from 0.2
+      // Fade in hero small title AFTER letters animation completes
+      tl.add(
+        animationModules.createHeroSmallTitleAnimation("in"),
+        `+=${config.heroSmallTitleEnterDelay}`
+      );
+
+      // Fade in navbar AFTER hero title animation completes - reduced delay for smoother feel
+      tl.add(animationModules.createNavbarFadeAnimation("in"), "+=0.1"); // Reduced from 0.2
 
       // Fade in page wrapper AFTER navbar fades in - reduced delay
-      tl.add(animationModules.createPageWrapperFadeAnimation('in'), '+=0.05'); // Reduced from 0.1
+      tl.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05"); // Reduced from 0.1
     }    // Animate the whole suffix container
     tl.add(animationModules.createSuffixAnimation(suffix, 'in'), 0.1);
 
@@ -612,20 +695,25 @@ const logoAnimations = {
   animateStaggerUpTransition(suffix, callback) {
     const letters = logoUtils.getLettersFromSuffix(suffix);
 
-    logoUtils.debug('Starting page wrapper fade out before logo stagger up transition');
+    logoUtils.debug(
+      "Starting page wrapper and hero small title fade out before logo stagger up transition"
+    );
 
     // Create stagger up animation for current suffix
     const staggerUpTl = gsap.timeline({
       onComplete: () => {
         // Hide the suffix after stagger up animation
-        gsap.set(suffix, { display: 'none' });
-        logoUtils.debug('Stagger up transition complete, suffix hidden');
+        gsap.set(suffix, { display: "none" });
+        logoUtils.debug("Stagger up transition complete, suffix hidden");
         if (callback) callback();
       }
     });
 
-    // Fade out page wrapper FIRST
-    staggerUpTl.add(animationModules.createPageWrapperFadeAnimation('out'));
+    // Fade out hero small title FIRST (fastest)
+    staggerUpTl.add(animationModules.createHeroSmallTitleAnimation("out"));
+
+    // Fade out page wrapper shortly after
+    staggerUpTl.add(animationModules.createPageWrapperFadeAnimation("out"), "+=0.05");
 
     // Apply stagger up animation to current letters AFTER page wrapper fades
     staggerUpTl.add(animationModules.createStaggerUpAnimation(letters), '+=0.1');

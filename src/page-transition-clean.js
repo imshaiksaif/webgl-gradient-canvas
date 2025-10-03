@@ -1,5 +1,8 @@
 console.log("Page Transition with V3 Gradient");
 console.log("🎛️  Control influence points: window.transitionsMouses = 1 or 2");
+console.log(
+  "📝  Hero Small Title Animation: Elements with [ss-ele='hero-small-title'] will animate out during transitions"
+);
 console.log("Current setting:", window.transitionsMouses || "1 (default)");
 
 // Set default if not specified
@@ -117,19 +120,19 @@ class PageTransitionV3 {
           float radialInfluence = smoothstep(0.35, 0.0, mouseDistance) * 0.2;
           float flowX = (st.x - mouse.x) * (mouse.y - 0.5) * 0.12;
           float flowY = (st.y - mouse.y) * (mouse.x - 0.5) * 0.1;
-          
+
           mouseInfluence = radialInfluence + flowX + flowY;
 
           // Second influence point (conditional based on u_dualMouse)
           if (u_dualMouse > 0.5) {
             vec2 mouseOffset2 = st - mouse2;
             float directionalInfluence2 = (mouse2.x - 0.5) * 0.2 + (mouse2.y - 0.5) * 0.15;
-            
+
             float mouseDistance2 = length(mouseOffset2);
             float radialInfluence2 = smoothstep(0.3, 0.0, mouseDistance2) * 0.15;
             float flowX2 = (st.x - mouse2.x) * (mouse2.y - 0.5) * 0.08;
             float flowY2 = (st.y - mouse2.y) * (mouse2.x - 0.5) * 0.06;
-            
+
             float secondInfluence = radialInfluence2 + flowX2 + flowY2;
             mouseInfluence += secondInfluence + directionalInfluence2;
           }
@@ -163,7 +166,7 @@ class PageTransitionV3 {
         // EXACT V3 color palette - slightly darkened
         vec3 lightGrey = vec3(0.8, 0.81, 0.82);     // Slightly darker light grey
         vec3 mediumGrey = vec3(0.55, 0.56, 0.57);   // Slightly darker medium grey
-        vec3 darkGrey = vec3(0.28, 0.29, 0.3);      // Slightly darker dark grey    
+        vec3 darkGrey = vec3(0.28, 0.29, 0.3);      // Slightly darker dark grey
 
         // Multi-zone interpolation for smooth transitions
         vec3 color;
@@ -217,7 +220,7 @@ class PageTransitionV3 {
   setupEventListeners() {
     // Auto-animate mouse position with organic movement
     // No actual mouse tracking - pure automatic animation
-    
+
     // Resize handler
     window.addEventListener('resize', () => {
       this.resize();
@@ -256,65 +259,80 @@ class PageTransitionV3 {
 
   startTransition(url) {
     this.pendingUrl = url;
-    
+
+    // Animate hero small title elements out before transition
+    const heroSmallTitleElements = document.querySelectorAll("[ss-ele='hero-small-title']");
+    if (heroSmallTitleElements.length > 0) {
+      // Animate out hero small title elements
+      heroSmallTitleElements.forEach((element) => {
+        element.style.transition = "opacity 0.3s ease-out, transform 0.3s ease-out";
+        element.style.opacity = "0";
+        element.style.transform = "translateY(-20px)";
+      });
+    }
+
     // Show gradient transition overlay IMMEDIATELY
-    this.canvas.style.opacity = '1';
-    this.canvas.style.pointerEvents = 'auto';
-    
+    this.canvas.style.opacity = "1";
+    this.canvas.style.pointerEvents = "auto";
+
     // Start gradient animation right away
     const startTime = Date.now();
-    
+
     const animate = () => {
       const elapsed = Date.now() - startTime;
       this.transitionProgress = Math.min(elapsed / 3000, 1); // 3 seconds
       this.time += 0.016;
-      
-        // Auto-animate TWO mouse positions with organic movement during transition
-        const slowTime = this.time * 0.6;   // Slower base speed
-        const mediumTime = this.time * 0.9;  // Slower medium speed
-        const fastTime = this.time * 1.3;    // Slower top speed
 
-        // First influence point - primary movement
-        this.targetMouse.x = 0.5 + 
-          Math.sin(slowTime) * 0.25 + 
-          Math.sin(mediumTime * 1.4) * 0.12 + 
-          Math.sin(fastTime * 0.8) * 0.08;
-        
-        this.targetMouse.y = 0.5 + 
-          Math.cos(slowTime * 0.9) * 0.2 + 
-          Math.cos(mediumTime * 1.2) * 0.1 + 
-          Math.cos(fastTime * 1.1) * 0.06;
+      // Auto-animate TWO mouse positions with organic movement during transition
+      const slowTime = this.time * 0.6; // Slower base speed
+      const mediumTime = this.time * 0.9; // Slower medium speed
+      const fastTime = this.time * 1.3; // Slower top speed
 
-        // Dynamic mouse influence based on window.transitionsMouses
-        const useSecondMouse = window.transitionsMouses === 2;
+      // First influence point - primary movement
+      this.targetMouse.x =
+        0.5 +
+        Math.sin(slowTime) * 0.25 +
+        Math.sin(mediumTime * 1.4) * 0.12 +
+        Math.sin(fastTime * 0.8) * 0.08;
 
-        // Second influence point - counter movement
-        if (useSecondMouse) {
-          if (!this.secondMouse) {
-            this.secondMouse = { x: 0.5, y: 0.5 };
-            this.targetSecondMouse = { x: 0.5, y: 0.5 };
-          }
+      this.targetMouse.y =
+        0.5 +
+        Math.cos(slowTime * 0.9) * 0.2 +
+        Math.cos(mediumTime * 1.2) * 0.1 +
+        Math.cos(fastTime * 1.1) * 0.06;
 
-          this.targetSecondMouse.x = 0.5 + 
-            Math.cos(slowTime * 1.3) * 0.2 + 
-            Math.sin(mediumTime * 0.7) * 0.1 + 
-            Math.cos(fastTime * 1.5) * 0.06;
-          
-          this.targetSecondMouse.y = 0.5 + 
-            Math.sin(slowTime * 1.1) * 0.18 + 
-            Math.cos(mediumTime * 0.9) * 0.08 + 
-            Math.sin(fastTime * 0.6) * 0.05;
-        }              // Smooth interpolation - dynamic based on mouse count
-        this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.08;
-        this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.08;
-        
-        if (useSecondMouse && this.secondMouse) {
-          this.secondMouse.x += (this.targetSecondMouse.x - this.secondMouse.x) * 0.06;
-          this.secondMouse.y += (this.targetSecondMouse.y - this.secondMouse.y) * 0.06;
+      // Dynamic mouse influence based on window.transitionsMouses
+      const useSecondMouse = window.transitionsMouses === 2;
+
+      // Second influence point - counter movement
+      if (useSecondMouse) {
+        if (!this.secondMouse) {
+          this.secondMouse = { x: 0.5, y: 0.5 };
+          this.targetSecondMouse = { x: 0.5, y: 0.5 };
         }
-      
+
+        this.targetSecondMouse.x =
+          0.5 +
+          Math.cos(slowTime * 1.3) * 0.2 +
+          Math.sin(mediumTime * 0.7) * 0.1 +
+          Math.cos(fastTime * 1.5) * 0.06;
+
+        this.targetSecondMouse.y =
+          0.5 +
+          Math.sin(slowTime * 1.1) * 0.18 +
+          Math.cos(mediumTime * 0.9) * 0.08 +
+          Math.sin(fastTime * 0.6) * 0.05;
+      } // Smooth interpolation - dynamic based on mouse count
+      this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.08;
+      this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.08;
+
+      if (useSecondMouse && this.secondMouse) {
+        this.secondMouse.x += (this.targetSecondMouse.x - this.secondMouse.x) * 0.06;
+        this.secondMouse.y += (this.targetSecondMouse.y - this.secondMouse.y) * 0.06;
+      }
+
       this.render();
-      
+
       if (this.transitionProgress < 1) {
         this.animationId = requestAnimationFrame(animate);
       } else {
@@ -322,7 +340,7 @@ class PageTransitionV3 {
         this.navigateToNewPage();
       }
     };
-    
+
     requestAnimationFrame(animate);
   }
 
@@ -337,13 +355,13 @@ class PageTransitionV3 {
       // Hide transition canvas
       this.canvas.style.opacity = '0';
       this.canvas.style.pointerEvents = 'none';
-      
+
       // Fade in new page content (excluding the canvas)
       const pageContent = document.querySelectorAll('body > *:not(#gradient-canvas)');
       pageContent.forEach(element => {
         element.style.opacity = '0';
         element.style.transition = 'opacity 0.8s ease-in';
-        
+
         // Fade in each element
         setTimeout(() => {
           element.style.opacity = '1';
@@ -360,21 +378,21 @@ class PageTransitionV3 {
 
   render() {
     const gl = this.gl;
-    
+
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    
+
     gl.useProgram(this.program);
     gl.enableVertexAttribArray(this.positionLocation);
     gl.vertexAttribPointer(this.positionLocation, 2, gl.FLOAT, false, 0, 0);
-    
+
     gl.uniform2f(this.mouseLocation, this.mouse.x, this.mouse.y);
     gl.uniform2f(this.mouse2Location, this.secondMouse ? this.secondMouse.x : 0.5, this.secondMouse ? this.secondMouse.y : 0.5);
     gl.uniform1f(this.timeLocation, this.time);
     gl.uniform1f(this.isMobileLocation, this.isMobile ? 1.0 : 0.0);
     gl.uniform1f(this.progressLocation, this.transitionProgress);
     gl.uniform1f(this.dualMouseLocation, window.transitionsMouses === 2 ? 1.0 : 0.0);
-    
+
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
 
@@ -382,7 +400,7 @@ class PageTransitionV3 {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
-    
+
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
       console.error('Shader error:', gl.getShaderInfoLog(shader));
       return null;
@@ -395,7 +413,7 @@ class PageTransitionV3 {
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
-    
+
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       console.error('Program error:', gl.getProgramInfoLog(program));
       return null;
