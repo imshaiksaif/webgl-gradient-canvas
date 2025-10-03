@@ -716,8 +716,28 @@ const logoAnimations = {
 
       // Fade in page wrapper AFTER navbar fades in - reduced delay
       tl.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05"); // Reduced from 0.1
-    } // Animate the whole suffix container
+    }
+
+    // Animate the whole suffix container
     tl.add(animationModules.createSuffixAnimation(suffix, "in"), 0.1);
+
+    // Fire custom event 1 second before animation completes (for hero image preparation)
+    tl.call(
+      () => {
+        // Dispatch custom event for page animation completion
+        const event = new CustomEvent("pageTransitionComplete", {
+          detail: {
+            pathname: window.location.pathname,
+            isTransition: isTransition,
+            isInitialLoad: !isTransition
+          }
+        });
+        document.dispatchEvent(event);
+        logoUtils.debug("Page animation complete event fired (1s early)", { isTransition });
+      },
+      null,
+      "-=0.3"
+    ); // Fire 0.3 second before timeline ends
 
     logoUtils.debug("Suffix animated in", { isTransition });
   },
