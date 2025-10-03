@@ -76,10 +76,10 @@ const aniGlobalVars = {
 const logoUtils = {
   // Remove anti-flicker CSS after setup
   removeAntiFlickerCSS() {
-    const style = document.getElementById('logo-animation-antiflicker');
+    const style = document.getElementById("logo-animation-antiflicker");
     if (style) {
       style.remove();
-      logoUtils.debug('Anti-flicker CSS removed');
+      logoUtils.debug("Anti-flicker CSS removed");
     }
   },
 
@@ -87,13 +87,13 @@ const logoUtils = {
   getLogoElements() {
     const logoHolder = document.querySelector(aniGlobalVars.logoHolder);
     if (!logoHolder) {
-      if (aniGlobalVars.navigation.debugMode) console.warn('Logo holder not found');
+      if (aniGlobalVars.navigation.debugMode) console.warn("Logo holder not found");
       return null;
     }
 
     const svg = logoHolder.querySelector(aniGlobalVars.svgElement);
     if (!svg) {
-      if (aniGlobalVars.navigation.debugMode) console.warn('SVG not found');
+      if (aniGlobalVars.navigation.debugMode) console.warn("SVG not found");
       return null;
     }
 
@@ -127,21 +127,21 @@ const logoUtils = {
 
     // Check partial matches
     for (const [key, selector] of Object.entries(pageMapping)) {
-      if (key !== '/' && pathname.includes(key)) {
+      if (key !== "/" && pathname.includes(key)) {
         return svg.querySelector(selector);
       }
     }
 
     // Default to home page
-    return svg.querySelector(pageMapping['/']);
+    return svg.querySelector(pageMapping["/"]);
   },
 
   // Find currently visible suffix
   findVisibleSuffix(suffixes) {
-    return suffixes.find(suffix => {
-      const display = gsap.getProperty(suffix, 'display');
-      const opacity = gsap.getProperty(suffix, 'opacity');
-      return display !== 'none' && opacity > 0;
+    return suffixes.find((suffix) => {
+      const display = gsap.getProperty(suffix, "display");
+      const opacity = gsap.getProperty(suffix, "opacity");
+      return display !== "none" && opacity > 0;
     });
   },
 
@@ -166,10 +166,10 @@ const logoUtils = {
   shouldHaveTransition(pathname) {
     // Get all page keys from pageMapping (includes homepage "/", projects, objects, lab)
     const transitionPages = Object.keys(aniGlobalVars.pageMapping);
-    
+
     // Check if pathname exactly matches "/" or includes any of the other pages
-    return pathname === "/" || transitionPages.some(page => 
-      page !== "/" && pathname.includes(page)
+    return (
+      pathname === "/" || transitionPages.some((page) => page !== "/" && pathname.includes(page))
     );
   }
 };
@@ -228,11 +228,12 @@ const animationModules = {
   },
 
   // Create suffix container animation
-  createSuffixAnimation(suffix, direction = 'in', options = {}) {
+  createSuffixAnimation(suffix, direction = "in", options = {}) {
     const config = { ...aniGlobalVars.animations, ...options };
 
-    if (direction === 'in') {
-      return gsap.fromTo(suffix,
+    if (direction === "in") {
+      return gsap.fromTo(
+        suffix,
         {
           y: config.partialY,
           opacity: config.hidden
@@ -257,16 +258,16 @@ const animationModules = {
   },
 
   // Create navbar fade animation
-  createNavbarFadeAnimation(direction = 'out', options = {}) {
+  createNavbarFadeAnimation(direction = "out", options = {}) {
     const config = { ...aniGlobalVars.animations, ...options };
     const navbarElements = logoUtils.getNavbarElements();
 
     if (navbarElements.length === 0) {
-      logoUtils.debug('No navbar elements found');
+      logoUtils.debug("No navbar elements found");
       return gsap.timeline(); // Return empty timeline
     }
 
-    if (direction === 'out') {
+    if (direction === "out") {
       return gsap.to(navbarElements, {
         opacity: config.hidden,
         duration: config.navbarFadeDuration,
@@ -284,16 +285,16 @@ const animationModules = {
   },
 
   // Create page wrapper fade animation
-  createPageWrapperFadeAnimation(direction = 'out', options = {}) {
+  createPageWrapperFadeAnimation(direction = "out", options = {}) {
     const config = { ...aniGlobalVars.animations, ...options };
     const pageWrapperElements = logoUtils.getPageWrapperElements();
 
     if (pageWrapperElements.length === 0) {
-      logoUtils.debug('No page wrapper elements found');
+      logoUtils.debug("No page wrapper elements found");
       return gsap.timeline(); // Return empty timeline
     }
 
-    if (direction === 'out') {
+    if (direction === "out") {
       return gsap.to(pageWrapperElements, {
         opacity: config.hidden,
         duration: config.pageWrapperFadeDuration,
@@ -311,16 +312,16 @@ const animationModules = {
   },
 
   // Create hero small title fade animation
-  createHeroSmallTitleAnimation(direction = 'out', options = {}) {
+  createHeroSmallTitleAnimation(direction = "out", options = {}) {
     const config = { ...aniGlobalVars.animations, ...options };
     const heroSmallTitleElements = document.querySelectorAll(aniGlobalVars.heroSmallTitle);
 
     if (heroSmallTitleElements.length === 0) {
-      logoUtils.debug('No hero small title elements found');
+      logoUtils.debug("No hero small title elements found");
       return gsap.timeline(); // Return empty timeline
     }
 
-    if (direction === 'out') {
+    if (direction === "out") {
       return gsap.to(heroSmallTitleElements, {
         opacity: config.hidden,
         y: config.heroSmallTitleExitY,
@@ -330,7 +331,8 @@ const animationModules = {
       });
     } else {
       // Stagger down animation for 'in' direction
-      return gsap.fromTo(heroSmallTitleElements,
+      return gsap.fromTo(
+        heroSmallTitleElements,
         {
           opacity: config.hidden,
           y: config.heroSmallTitleExitY // Start from above (negative Y)
@@ -357,15 +359,15 @@ const logoAnimations = {
 
   // Initialize logo animation on page load
   init() {
-    if (typeof gsap === 'undefined') {
-      console.warn('GSAP is not loaded. Please include GSAP library.');
+    if (typeof gsap === "undefined") {
+      console.warn("GSAP is not loaded. Please include GSAP library.");
       return;
     }
 
     // Check if we just completed a transition to prevent conflicts
-    if (localStorage.getItem('logoAnimationTransitioning') === 'true') {
-      localStorage.removeItem('logoAnimationTransitioning');
-      logoUtils.debug('Skipping transition setup - page just loaded from navigation');
+    if (localStorage.getItem("logoAnimationTransitioning") === "true") {
+      localStorage.removeItem("logoAnimationTransitioning");
+      logoUtils.debug("Skipping transition setup - page just loaded from navigation");
 
       this.currentPath = window.location.pathname;
       this.isInitialLoad = true;
@@ -522,7 +524,7 @@ const logoAnimations = {
   // Animate on page load
   animatePageLoad() {
     const currentPath = window.location.pathname;
-    logoUtils.debug('Page load animation started with navbar fade in', currentPath);
+    logoUtils.debug("Page load animation started with navbar fade in", currentPath);
 
     // Create main timeline
     this.timeline = gsap.timeline();
@@ -537,15 +539,15 @@ const logoAnimations = {
       // Check if both current page and target page should have transitions
       const currentPageHasTransitions = logoUtils.shouldHaveTransition(this.currentPath);
       const targetPageHasTransitions = logoUtils.shouldHaveTransition(newPath);
-      
+
       // Only use controlled transitions if BOTH pages are transition-enabled
       const shouldUseTransition = currentPageHasTransitions && targetPageHasTransitions;
-      
+
       // Prevent infinite loops by checking if we're already transitioning to this path
       if (newPath !== this.currentPath && !this.isTransitioning && this.pendingPath !== newPath) {
-        logoUtils.debug('Path change detected', { 
-          from: this.currentPath, 
-          to: newPath, 
+        logoUtils.debug("Path change detected", {
+          from: this.currentPath,
+          to: newPath,
           shouldUseTransition,
           currentPageHasTransitions,
           targetPageHasTransitions
@@ -558,28 +560,28 @@ const logoAnimations = {
 
           // Prevent the actual navigation by reverting the URL
           if (this.currentPath !== window.location.pathname) {
-            history.replaceState(null, '', this.currentPath);
+            history.replaceState(null, "", this.currentPath);
           }
 
           // Start our controlled transition
           this.transitionToPage(newPath);
         } else {
           // Allow normal navigation for non-transition pages
-          logoUtils.debug('Allowing normal navigation - not both pages have transitions enabled');
+          logoUtils.debug("Allowing normal navigation - not both pages have transitions enabled");
           // Don't prevent default navigation
         }
       }
     };
 
     // Handle popstate (back/forward buttons)
-    window.addEventListener('popstate', (event) => {
+    window.addEventListener("popstate", (event) => {
       if (!this.isTransitioning) {
         handlePathChange(window.location.pathname);
       }
     });
 
     // Intercept programmatic navigation
-    ['pushState', 'replaceState'].forEach(method => {
+    ["pushState", "replaceState"].forEach((method) => {
       const original = history[method];
       history[method] = (...args) => {
         if (!this.isTransitioning) {
@@ -596,24 +598,27 @@ const logoAnimations = {
     });
 
     // Intercept link clicks
-    document.addEventListener('click', (event) => {
-      const link = event.target.closest('a[href]');
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest("a[href]");
       if (link && !this.isTransitioning) {
-        const href = link.getAttribute('href');
-        if (href && href.startsWith('/') && href !== this.currentPath) {
+        const href = link.getAttribute("href");
+        if (href && href.startsWith("/") && href !== this.currentPath) {
           // Check if both pages should have transitions before preventing default
           const currentPageHasTransitions = logoUtils.shouldHaveTransition(this.currentPath);
           const targetPageHasTransitions = logoUtils.shouldHaveTransition(href);
           const shouldUseTransition = currentPageHasTransitions && targetPageHasTransitions;
-          
+
           if (shouldUseTransition) {
             // Only prevent default if we're going to handle the transition
             event.preventDefault();
-            logoUtils.debug('Link click intercepted for transition', href);
+            logoUtils.debug("Link click intercepted for transition", href);
             handlePathChange(href);
           } else {
             // Allow normal navigation for non-transition combinations
-            logoUtils.debug('Allowing normal link navigation', { from: this.currentPath, to: href });
+            logoUtils.debug("Allowing normal link navigation", {
+              from: this.currentPath,
+              to: href
+            });
             // Don't prevent default - let browser handle normally
           }
         }
@@ -633,15 +638,19 @@ const logoAnimations = {
 
     // Hide all suffixes first
     const allSuffixes = logoUtils.getSuffixElements(svg);
-    animationModules.setupElements(allSuffixes, { display: 'none' });
+    animationModules.setupElements(allSuffixes, { display: "none" });
 
     // Find and show target suffix
     const targetSuffix = logoUtils.findTargetSuffix(svg, pathname);
     if (targetSuffix) {
-      logoUtils.debug('Showing suffix for page', { pathname, suffix: targetSuffix.getAttribute('pagePath'), isTransition });
+      logoUtils.debug("Showing suffix for page", {
+        pathname,
+        suffix: targetSuffix.getAttribute("pagePath"),
+        isTransition
+      });
       this.animateSuffixIn(targetSuffix, isTransition);
     } else {
-      logoUtils.debug('No suffix found for page', pathname);
+      logoUtils.debug("No suffix found for page", pathname);
     }
   },
 
@@ -650,7 +659,7 @@ const logoAnimations = {
     const config = aniGlobalVars.animations;
 
     // Show suffix
-    gsap.set(suffix, { display: 'block' });
+    gsap.set(suffix, { display: "block" });
 
     // Get letters from suffix
     const letters = logoUtils.getLettersFromSuffix(suffix);
@@ -707,10 +716,10 @@ const logoAnimations = {
 
       // Fade in page wrapper AFTER navbar fades in - reduced delay
       tl.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05"); // Reduced from 0.1
-    }    // Animate the whole suffix container
-    tl.add(animationModules.createSuffixAnimation(suffix, 'in'), 0.1);
+    } // Animate the whole suffix container
+    tl.add(animationModules.createSuffixAnimation(suffix, "in"), 0.1);
 
-    logoUtils.debug('Suffix animated in', { isTransition });
+    logoUtils.debug("Suffix animated in", { isTransition });
   },
 
   // Animate suffix out using modular animations
@@ -720,8 +729,8 @@ const logoAnimations = {
     // Create timeline for exit animation
     const tl = gsap.timeline({
       onComplete: () => {
-        gsap.set(suffix, { display: 'none' });
-        logoUtils.debug('Suffix animated out');
+        gsap.set(suffix, { display: "none" });
+        logoUtils.debug("Suffix animated out");
         if (callback) callback();
       }
     });
@@ -730,7 +739,7 @@ const logoAnimations = {
     tl.add(animationModules.createExitAnimation(letters));
 
     // Animate the whole suffix out
-    tl.add(animationModules.createSuffixAnimation(suffix, 'out'), 0.2);
+    tl.add(animationModules.createSuffixAnimation(suffix, "out"), 0.2);
   },
 
   // Animate current suffix with stagger up effect during transition
@@ -758,13 +767,13 @@ const logoAnimations = {
     staggerUpTl.add(animationModules.createPageWrapperFadeAnimation("out"), "+=0.05");
 
     // Apply stagger up animation to current letters AFTER page wrapper fades
-    staggerUpTl.add(animationModules.createStaggerUpAnimation(letters), '+=0.1');
+    staggerUpTl.add(animationModules.createStaggerUpAnimation(letters), "+=0.1");
 
     // Fade out navbar AFTER logo stagger up completes
-    staggerUpTl.add(animationModules.createNavbarFadeAnimation('out'), '+=0.1');
-  },  // Handle page transitions using utilities
+    staggerUpTl.add(animationModules.createNavbarFadeAnimation("out"), "+=0.1");
+  }, // Handle page transitions using utilities
   transitionToPage(newPath) {
-    logoUtils.debug('Starting controlled transition to page', newPath);
+    logoUtils.debug("Starting controlled transition to page", newPath);
 
     const elements = logoUtils.getLogoElements();
     if (!elements) {
@@ -780,16 +789,19 @@ const logoAnimations = {
     this.isInitialLoad = false;
 
     if (currentSuffix) {
-      logoUtils.debug('Current suffix found, starting stagger up animation', currentSuffix.getAttribute('pagePath'));
+      logoUtils.debug(
+        "Current suffix found, starting stagger up animation",
+        currentSuffix.getAttribute("pagePath")
+      );
 
       // Start the stagger up animation for current suffix
       this.animateStaggerUpTransition(currentSuffix, () => {
         // Navigate immediately when animation completes
-        logoUtils.debug('Stagger up animation complete, navigating to new page');
+        logoUtils.debug("Stagger up animation complete, navigating to new page");
         this.completeTransition(newPath);
       });
     } else {
-      logoUtils.debug('No current suffix, navigating directly');
+      logoUtils.debug("No current suffix, navigating directly");
       // No current suffix, navigate immediately
       this.completeTransition(newPath);
     }
@@ -797,7 +809,7 @@ const logoAnimations = {
 
   // Complete the actual navigation and show new page
   completeTransition(newPath) {
-    logoUtils.debug('Completing transition to', newPath);
+    logoUtils.debug("Completing transition to", newPath);
 
     // Clear any existing timeouts or animations that might interfere
     gsap.killTweensOf("*");
@@ -808,7 +820,7 @@ const logoAnimations = {
     this.pendingPath = null;
 
     // Add a flag to localStorage to prevent re-initialization issues
-    localStorage.setItem('logoAnimationTransitioning', 'true');
+    localStorage.setItem("logoAnimationTransitioning", "true");
 
     // Small delay to ensure state is properly set before navigation
     setTimeout(() => {
@@ -816,7 +828,7 @@ const logoAnimations = {
       window.location.href = newPath;
     }, 50);
 
-    logoUtils.debug('Navigating to', newPath);
+    logoUtils.debug("Navigating to", newPath);
   },
 
   // Reset animation (useful for testing)
@@ -827,7 +839,7 @@ const logoAnimations = {
     this.isInitialLoad = true; // Reset initial load state
     this.isTransitioning = false; // Reset transition state
     this.pendingPath = null; // Clear pending path
-    logoUtils.debug('Animation reset');
+    logoUtils.debug("Animation reset");
     this.setupInitialState();
   },
 
@@ -837,13 +849,13 @@ const logoAnimations = {
       this.timeline.kill();
     }
     gsap.killTweensOf("*");
-    logoUtils.debug('All animations killed');
+    logoUtils.debug("All animations killed");
   },
 
   // Enable/disable debug mode
   setDebugMode(enabled) {
     aniGlobalVars.navigation.debugMode = enabled;
-    logoUtils.debug('Debug mode', enabled ? 'enabled' : 'disabled');
+    logoUtils.debug("Debug mode", enabled ? "enabled" : "disabled");
   }
 };
 
