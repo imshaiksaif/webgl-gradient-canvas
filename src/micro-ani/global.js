@@ -160,6 +160,17 @@ const logoUtils = {
     if (aniGlobalVars.navigation.debugMode) {
       console.log(`[Logo Animation] ${message}`, data);
     }
+  },
+
+  // Check if a path should have page transitions
+  shouldHaveTransition(pathname) {
+    // Get all page keys from pageMapping (includes homepage "/", projects, objects, lab)
+    const transitionPages = Object.keys(aniGlobalVars.pageMapping);
+    
+    // Check if pathname exactly matches "/" or includes any of the other pages
+    return pathname === "/" || transitionPages.some(page => 
+      page !== "/" && pathname.includes(page)
+    );
   }
 };
 // Animation modules
@@ -523,21 +534,40 @@ const logoAnimations = {
   // Setup navigation listeners using configuration
   setupNavigationListeners() {
     const handlePathChange = (newPath) => {
+      // Check if both current page and target page should have transitions
+      const currentPageHasTransitions = logoUtils.shouldHaveTransition(this.currentPath);
+      const targetPageHasTransitions = logoUtils.shouldHaveTransition(newPath);
+      
+      // Only use controlled transitions if BOTH pages are transition-enabled
+      const shouldUseTransition = currentPageHasTransitions && targetPageHasTransitions;
+      
       // Prevent infinite loops by checking if we're already transitioning to this path
       if (newPath !== this.currentPath && !this.isTransitioning && this.pendingPath !== newPath) {
-        logoUtils.debug('Path change detected', { from: this.currentPath, to: newPath });
+        logoUtils.debug('Path change detected', { 
+          from: this.currentPath, 
+          to: newPath, 
+          shouldUseTransition,
+          currentPageHasTransitions,
+          targetPageHasTransitions
+        });
 
-        // Store the pending path and start transition
-        this.pendingPath = newPath;
-        this.isTransitioning = true;
+        if (shouldUseTransition) {
+          // Store the pending path and start transition
+          this.pendingPath = newPath;
+          this.isTransitioning = true;
 
-        // Prevent the actual navigation by reverting the URL
-        if (this.currentPath !== window.location.pathname) {
-          history.replaceState(null, '', this.currentPath);
+          // Prevent the actual navigation by reverting the URL
+          if (this.currentPath !== window.location.pathname) {
+            history.replaceState(null, '', this.currentPath);
+          }
+
+          // Start our controlled transition
+          this.transitionToPage(newPath);
+        } else {
+          // Allow normal navigation for non-transition pages
+          logoUtils.debug('Allowing normal navigation - not both pages have transitions enabled');
+          // Don't prevent default navigation
         }
-
-        // Start our controlled transition
-        this.transitionToPage(newPath);
       }
     };
 
@@ -571,9 +601,21 @@ const logoAnimations = {
       if (link && !this.isTransitioning) {
         const href = link.getAttribute('href');
         if (href && href.startsWith('/') && href !== this.currentPath) {
-          event.preventDefault();
-          logoUtils.debug('Link click intercepted', href);
-          handlePathChange(href);
+          // Check if both pages should have transitions before preventing default
+          const currentPageHasTransitions = logoUtils.shouldHaveTransition(this.currentPath);
+          const targetPageHasTransitions = logoUtils.shouldHaveTransition(href);
+          const shouldUseTransition = currentPageHasTransitions && targetPageHasTransitions;
+          
+          if (shouldUseTransition) {
+            // Only prevent default if we're going to handle the transition
+            event.preventDefault();
+            logoUtils.debug('Link click intercepted for transition', href);
+            handlePathChange(href);
+          } else {
+            // Allow normal navigation for non-transition combinations
+            logoUtils.debug('Allowing normal link navigation', { from: this.currentPath, to: href });
+            // Don't prevent default - let browser handle normally
+          }
         }
       }
     });
