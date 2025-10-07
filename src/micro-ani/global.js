@@ -87,13 +87,11 @@ const logoUtils = {
   getLogoElements() {
     const logoHolder = document.querySelector(aniGlobalVars.logoHolder);
     if (!logoHolder) {
-      if (aniGlobalVars.navigation.debugMode) console.warn("Logo holder not found");
       return null;
     }
 
     const svg = logoHolder.querySelector(aniGlobalVars.svgElement);
     if (!svg) {
-      if (aniGlobalVars.navigation.debugMode) console.warn("SVG not found");
       return null;
     }
 
@@ -102,13 +100,41 @@ const logoUtils = {
 
   // Get suffix elements
   getSuffixElements(svg) {
-    return Array.from(svg.querySelectorAll(aniGlobalVars.suffixElements));
+    // Try primary selector first
+    let elements = Array.from(svg.querySelectorAll(aniGlobalVars.suffixElements));
+
+    // Safari fallback: try alternative selectors if no elements found
+    if (elements.length === 0) {
+      elements = Array.from(svg.querySelectorAll(".suffix"));
+      logoUtils.debug("Using fallback suffix selector", elements.length);
+    }
+
+    return elements;
   },
 
   // Get beta elements
   getBetaElements(svg) {
-    const betaGroup = svg.querySelector(aniGlobalVars.betaGroup);
-    return betaGroup ? Array.from(betaGroup.querySelectorAll(aniGlobalVars.letterElements)) : [];
+    // Try primary selector
+    let betaGroup = svg.querySelector(aniGlobalVars.betaGroup);
+
+    // Safari fallback: try alternative selectors
+    if (!betaGroup) {
+      betaGroup = svg.querySelector("#beta") || svg.querySelector(".beta");
+      if (betaGroup) {
+        logoUtils.debug("Using fallback beta selector");
+      }
+    }
+
+    if (!betaGroup) return [];
+
+    // Get letter elements with fallback
+    let letters = Array.from(betaGroup.querySelectorAll(aniGlobalVars.letterElements));
+    if (letters.length === 0) {
+      letters = Array.from(betaGroup.querySelectorAll(".letter"));
+      logoUtils.debug("Using fallback letter selector", letters.length);
+    }
+
+    return letters;
   },
 
   // Get letters from suffix
@@ -120,20 +146,48 @@ const logoUtils = {
   findTargetSuffix(svg, pathname) {
     const { pageMapping } = aniGlobalVars;
 
+    // Safari-compatible: Get all suffix elements and filter by attribute
+    const allSuffixes = Array.from(svg.querySelectorAll('[class*="suffix"]'));
+
+    if (allSuffixes.length === 0) {
+      logoUtils.debug("No suffix elements found in SVG");
+      return null;
+    }
+
     // Check exact path first
+    let targetSuffix = null;
     if (pageMapping[pathname]) {
-      return svg.querySelector(pageMapping[pathname]);
+      targetSuffix = allSuffixes.find((el) => {
+        const pagePath = el.getAttribute("pagePath");
+        return pagePath === pathname;
+      });
+      if (targetSuffix) return targetSuffix;
     }
 
     // Check partial matches
     for (const [key, selector] of Object.entries(pageMapping)) {
       if (key !== "/" && pathname.includes(key)) {
-        return svg.querySelector(selector);
+        targetSuffix = allSuffixes.find((el) => {
+          const pagePath = el.getAttribute("pagePath");
+          return pagePath && pagePath.includes(key);
+        });
+        if (targetSuffix) return targetSuffix;
       }
     }
 
-    // Default to home page
-    return svg.querySelector(pageMapping["/"]);
+    // Default to home page - try multiple approaches for Safari
+    targetSuffix = allSuffixes.find((el) => {
+      const pagePath = el.getAttribute("pagePath");
+      return pagePath === "/" || pagePath === "home" || pagePath === "";
+    });
+
+    // If still not found, use first suffix as fallback
+    if (!targetSuffix && allSuffixes.length > 0) {
+      logoUtils.debug("Using first suffix as fallback", allSuffixes[0]);
+      targetSuffix = allSuffixes[0];
+    }
+
+    return targetSuffix;
   },
 
   // Find currently visible suffix
@@ -364,6 +418,12 @@ const logoAnimations = {
       return;
     }
 
+    // Check if logo elements exist
+    const elements = logoUtils.getLogoElements();
+    if (!elements) {
+      logoUtils.debug("Logo elements not found - will animate navbar and page wrapper only");
+    }
+
     // Check if we just completed a transition to prevent conflicts
     if (localStorage.getItem("logoAnimationTransitioning") === "true") {
       localStorage.removeItem("logoAnimationTransitioning");
@@ -407,27 +467,29 @@ const logoAnimations = {
 
   // Setup initial state using modular utilities
   setupInitialState() {
-    const elements = logoUtils.getLogoElements();
-    if (!elements) return;
-
-    const { svg } = elements;
     const config = aniGlobalVars.animations;
+    const elements = logoUtils.getLogoElements();
 
-    // Setup suffix elements
-    const suffixes = logoUtils.getSuffixElements(svg);
-    animationModules.setupElements(suffixes, {
-      display: "none",
-      y: config.hiddenY,
-      opacity: config.hidden
-    });
+    // Setup logo elements if they exist
+    if (elements) {
+      const { svg } = elements;
 
-    // Setup BETA elements (keep visible and static)
-    const betaLetters = logoUtils.getBetaElements(svg);
-    animationModules.setupElements(betaLetters, {
-      y: config.visibleY,
-      opacity: config.visible,
-      transformOrigin: config.transformOrigin
-    });
+      // Setup suffix elements
+      const suffixes = logoUtils.getSuffixElements(svg);
+      animationModules.setupElements(suffixes, {
+        display: "none",
+        y: config.hiddenY,
+        opacity: config.hidden
+      });
+
+      // Setup BETA elements (keep visible and static)
+      const betaLetters = logoUtils.getBetaElements(svg);
+      animationModules.setupElements(betaLetters, {
+        y: config.visibleY,
+        opacity: config.visible,
+        transformOrigin: config.transformOrigin
+      });
+    }
 
     // Setup navbar elements (initially hidden for page load animation)
     const navbarElements = logoUtils.getNavbarElements();
@@ -462,27 +524,29 @@ const logoAnimations = {
 
   // Setup initial state when coming from a transition
   setupInitialStateForTransition() {
-    const elements = logoUtils.getLogoElements();
-    if (!elements) return;
-
-    const { svg } = elements;
     const config = aniGlobalVars.animations;
+    const elements = logoUtils.getLogoElements();
 
-    // Setup suffix elements
-    const suffixes = logoUtils.getSuffixElements(svg);
-    animationModules.setupElements(suffixes, {
-      display: "none",
-      y: config.hiddenY,
-      opacity: config.hidden
-    });
+    // Setup logo elements if they exist
+    if (elements) {
+      const { svg } = elements;
 
-    // Setup BETA elements (keep visible and static)
-    const betaLetters = logoUtils.getBetaElements(svg);
-    animationModules.setupElements(betaLetters, {
-      y: config.visibleY,
-      opacity: config.visible,
-      transformOrigin: config.transformOrigin
-    });
+      // Setup suffix elements
+      const suffixes = logoUtils.getSuffixElements(svg);
+      animationModules.setupElements(suffixes, {
+        display: "none",
+        y: config.hiddenY,
+        opacity: config.hidden
+      });
+
+      // Setup BETA elements (keep visible and static)
+      const betaLetters = logoUtils.getBetaElements(svg);
+      animationModules.setupElements(betaLetters, {
+        y: config.visibleY,
+        opacity: config.visible,
+        transformOrigin: config.transformOrigin
+      });
+    }
 
     // Setup navbar elements (hidden because they should fade out during transition)
     const navbarElements = logoUtils.getNavbarElements();
@@ -511,12 +575,6 @@ const logoAnimations = {
       });
       logoUtils.debug("Hero small title elements initialized as hidden from previous transition");
     }
-    if (pageWrapperElements.length > 0) {
-      animationModules.setupElements(pageWrapperElements, {
-        opacity: config.hidden // Hidden from previous page transition
-      });
-      logoUtils.debug("Page wrapper elements initialized as hidden from previous transition");
-    }
 
     logoUtils.debug("Initial state setup for transition complete");
   },
@@ -524,13 +582,29 @@ const logoAnimations = {
   // Animate on page load
   animatePageLoad() {
     const currentPath = window.location.pathname;
-    logoUtils.debug("Page load animation started with navbar fade in", currentPath);
+    logoUtils.debug("Page load animation started", currentPath);
 
     // Create main timeline
     this.timeline = gsap.timeline();
 
-    // Show the appropriate suffix with initial load animation (stagger in)
-    this.showSuffixForPage(currentPath, false); // false indicates this is initial load
+    const elements = logoUtils.getLogoElements();
+
+    if (elements) {
+      // Show the appropriate suffix with initial load animation (stagger in)
+      this.showSuffixForPage(currentPath, false); // false indicates this is initial load
+    } else {
+      // No logo elements - just animate navbar and page wrapper
+      logoUtils.debug("Animating navbar and page wrapper only (no logo elements)");
+
+      // Fade in hero small title first
+      this.timeline.add(animationModules.createHeroSmallTitleAnimation("in"));
+
+      // Fade in navbar
+      this.timeline.add(animationModules.createNavbarFadeAnimation("in"), "+=0.1");
+
+      // Fade in page wrapper
+      this.timeline.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05");
+    }
   },
 
   // Setup navigation listeners using configuration
@@ -632,12 +706,16 @@ const logoAnimations = {
   // Show suffix based on current page using utilities
   showSuffixForPage(pathname, isTransition = false) {
     const elements = logoUtils.getLogoElements();
-    if (!elements) return;
+    if (!elements) {
+      logoUtils.debug("Cannot show suffix - logo elements not found");
+      return;
+    }
 
     const { svg } = elements;
 
     // Hide all suffixes first
     const allSuffixes = logoUtils.getSuffixElements(svg);
+    logoUtils.debug("Found suffix elements", allSuffixes.length);
     animationModules.setupElements(allSuffixes, { display: "none" });
 
     // Find and show target suffix
@@ -645,12 +723,17 @@ const logoAnimations = {
     if (targetSuffix) {
       logoUtils.debug("Showing suffix for page", {
         pathname,
-        suffix: targetSuffix.getAttribute("pagePath"),
+        suffix: targetSuffix.getAttribute("pagePath") || "(no pagePath attribute)",
+        suffixClass: targetSuffix.getAttribute("class"),
         isTransition
       });
       this.animateSuffixIn(targetSuffix, isTransition);
     } else {
-      logoUtils.debug("No suffix found for page", pathname);
+      logoUtils.debug("No suffix found for page", {
+        pathname,
+        totalSuffixes: allSuffixes.length,
+        availablePaths: allSuffixes.map((s) => s.getAttribute("pagePath"))
+      });
     }
   },
 
@@ -882,8 +965,8 @@ const logoAnimations = {
 // Initialization module
 const logoInitializer = {
   init() {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => {
         logoAnimations.init();
       });
     } else {
@@ -900,7 +983,7 @@ window.logoAnimations = logoAnimations;
 window.aniGlobalVars = aniGlobalVars;
 
 // Enable debug mode in development
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
   logoAnimations.setDebugMode(true);
 }
 
