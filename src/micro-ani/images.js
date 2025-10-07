@@ -6,6 +6,7 @@
 
 // Cache for hero elements to avoid repeated DOM queries
 let heroElementsCache = null;
+let imageCaptionsCache = null;
 
 // Get hero elements with caching
 function getHeroElements() {
@@ -15,16 +16,50 @@ function getHeroElements() {
   return heroElementsCache;
 }
 
+// Get image caption elements with caching
+function getImageCaptionElements() {
+  if (!imageCaptionsCache) {
+    imageCaptionsCache = document.querySelectorAll('[ss-wait-for="image-captions"]');
+  }
+  return imageCaptionsCache;
+}
+
 // Set initial state for hero elements using GSAP instead of CSS
 function setHeroInitialState() {
   try {
     const heroElements = getHeroElements();
+    const captionElements = getImageCaptionElements();
+
+    // Handle hero elements (page-transition)
     if (heroElements.length > 0) {
-      gsap.set(heroElements, {
+      heroElements.forEach((element) => {
+        const isImage = element.tagName.toLowerCase() === "img";
+
+        if (isImage) {
+          // Images get blur and scale effect
+          gsap.set(element, {
+            opacity: 0,
+            y: 50,
+            scale: 1.1,
+            filter: "blur(10px)",
+            force3D: true
+          });
+        } else {
+          // Non-images (captions, divs) get simple fade
+          gsap.set(element, {
+            opacity: 0,
+            y: 50,
+            force3D: true
+          });
+        }
+      });
+    }
+
+    // Handle image caption elements - always use simple fade
+    if (captionElements.length > 0) {
+      gsap.set(captionElements, {
         opacity: 0,
-        y: 50,
-        scale: 1.1,
-        filter: "blur(10px)",
+        y: 30,
         force3D: true
       });
     }
@@ -34,8 +69,8 @@ function setHeroInitialState() {
 }
 
 // Set initial state immediately
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', setHeroInitialState);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setHeroInitialState);
 } else {
   setHeroInitialState();
 }
@@ -183,14 +218,50 @@ function createImageReveal(selector, options = {}) {
   return new ImageReveal(elements, options);
 }
 
+// Initialize image caption elements with scroll triggers
+function initImageCaptions() {
+  try {
+    const captionElements = getImageCaptionElements();
+
+    if (captionElements.length === 0) return;
+
+    captionElements.forEach((element) => {
+      // Create smooth fade-up animation synchronized with images
+      new ImageReveal([element], {
+        animationType: "fade-up",
+        duration: 1.5,
+        ease: "power3.out", // Match image easing
+        start: "top 85%", // Match image start trigger
+        end: "bottom 15%"
+      });
+    });
+
+    // Refresh ScrollTrigger after setup
+    setTimeout(() => {
+      if (typeof ScrollTrigger !== "undefined") {
+        ScrollTrigger.refresh();
+      }
+    }, 100);
+  } catch (error) {
+    // Error initializing image captions
+  }
+}
+
 // Auto-initialize common elements
 function initImageReveal() {
   // Auto-reveal project images (excluding hero images that wait for page transitions)
-  createImageReveal('img:not([ss-dont-animate]):not([ss-wait-for="page-transition"])', {
-    animationType: "blur",
-    duration: 1.5,
-    ease: "power3.out"
-  });
+  createImageReveal(
+    'img:not([ss-dont-animate]):not([ss-wait-for="page-transition"]):not([ss-wait-for="image-captions"])',
+    {
+      animationType: "blur",
+      duration: 1.5,
+      ease: "power3.out",
+      start: "top 85%" // Explicit start trigger
+    }
+  );
+
+  // Initialize image captions
+  initImageCaptions();
 
   // // Auto-reveal other gallery images
   // createImageReveal('.gallery img, .gallery-grid img:not(.project-image)', {
@@ -209,35 +280,35 @@ function initHeroImages() {
       return;
     }
 
-  // Check if elements are already in view and animate immediately
-  const elementsInView = [];
-  const elementsOutOfView = [];
+    // Check if elements are already in view and animate immediately
+    const elementsInView = [];
+    const elementsOutOfView = [];
 
-  // Use Intersection Observer for better performance if available
-  if ('IntersectionObserver' in window) {
-    heroElements.forEach((element) => {
-      const rect = element.getBoundingClientRect();
-      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-      const isInView = rect.top < viewportHeight && rect.bottom > 0 && rect.top > -rect.height;
+    // Use Intersection Observer for better performance if available
+    if ("IntersectionObserver" in window) {
+      heroElements.forEach((element) => {
+        const rect = element.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        const isInView = rect.top < viewportHeight && rect.bottom > 0 && rect.top > -rect.height;
 
-      if (isInView) {
-        elementsInView.push(element);
-      } else {
-        elementsOutOfView.push(element);
-      }
-    });
-  } else {
-    // Fallback for older browsers
-    heroElements.forEach((element) => {
-      const rect = element.getBoundingClientRect();
-      const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isInView) {
+          elementsInView.push(element);
+        } else {
+          elementsOutOfView.push(element);
+        }
+      });
+    } else {
+      // Fallback for older browsers
+      heroElements.forEach((element) => {
+        const rect = element.getBoundingClientRect();
+        const isInView = rect.top < window.innerHeight && rect.bottom > 0;
 
-      if (isInView) {
-        elementsInView.push(element);
-      } else {
-        elementsOutOfView.push(element);
-      }
-    });
+        if (isInView) {
+          elementsInView.push(element);
+        } else {
+          elementsOutOfView.push(element);
+        }
+      });
     }
 
     // Animate elements already in view immediately
@@ -248,34 +319,36 @@ function initHeroImages() {
     // Set up ScrollTrigger for elements out of view
     if (elementsOutOfView.length > 0) {
       setupHeroScrollTriggers(elementsOutOfView);
-    }  } catch (error) {
+    }
+  } catch (error) {
     // Error initializing hero images
   }
-}function getAnimationPropsForType(type) {
+}
+function getAnimationPropsForType(type) {
   const animations = {
     "fade-in": {
       fromProps: { opacity: 0, y: 50, scale: 1.1, filter: "blur(10px)" },
       toProps: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
     },
     "fade-up": {
-      fromProps: { opacity: 0, y: 50 },
-      toProps: { opacity: 1, y: 0 }
+      fromProps: { opacity: 0, y: 50, scale: 1, filter: "blur(10px)" },
+      toProps: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
     },
     "fade-down": {
-      fromProps: { opacity: 0, y: -50 },
-      toProps: { opacity: 1, y: 0 }
+      fromProps: { opacity: 0, y: -50, scale: 1, filter: "blur(0px)" },
+      toProps: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
     },
     "fade-left": {
-      fromProps: { opacity: 0, x: 50 },
-      toProps: { opacity: 1, x: 0 }
+      fromProps: { opacity: 0, x: 50, scale: 1, filter: "blur(0px)" },
+      toProps: { opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }
     },
     "fade-right": {
-      fromProps: { opacity: 0, x: -50 },
-      toProps: { opacity: 1, x: 0 }
+      fromProps: { opacity: 0, x: -50, scale: 1, filter: "blur(0px)" },
+      toProps: { opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }
     },
     "scale-up": {
-      fromProps: { opacity: 0, scale: 0.8 },
-      toProps: { opacity: 1, scale: 1 }
+      fromProps: { opacity: 0, scale: 0.8, filter: "blur(0px)" },
+      toProps: { opacity: 1, scale: 1, filter: "blur(0px)" }
     }
   };
 
@@ -298,7 +371,17 @@ function animateHeroElementsImmediate(elements) {
     elements.forEach((element, index) => {
       if (!element || !element.nodeType) return;
 
-      const animationType = element.getAttribute("ss-animation") || HERO_ANIMATION_CONFIG.defaultType;
+      // Check if element is an image or not
+      const isImage = element.tagName.toLowerCase() === "img";
+
+      // For non-images (like divs with captions), use simple fade animation
+      let animationType;
+      if (!isImage) {
+        animationType = "fade-up"; // Smooth fade for non-image elements
+      } else {
+        animationType = element.getAttribute("ss-animation") || HERO_ANIMATION_CONFIG.defaultType;
+      }
+
       const { fromProps, toProps } = getAnimationPropsForType(animationType);
 
       // Set initial state
@@ -315,7 +398,7 @@ function animateHeroElementsImmediate(elements) {
   } catch (error) {
     // Error animating hero elements
   }
-}// Reusable function to setup ScrollTrigger for hero elements
+} // Reusable function to setup ScrollTrigger for hero elements
 function setupHeroScrollTriggers(elements) {
   if (!elements || elements.length === 0) return;
 
@@ -323,7 +406,16 @@ function setupHeroScrollTriggers(elements) {
     elements.forEach((element, index) => {
       if (!element || !element.nodeType) return;
 
-      const animationType = element.getAttribute("ss-animation") || HERO_ANIMATION_CONFIG.defaultType;
+      // Check if element is an image or not
+      const isImage = element.tagName.toLowerCase() === "img";
+
+      // For non-images (like divs with captions), use simple fade animation
+      let animationType;
+      if (!isImage) {
+        animationType = "fade-up"; // Smooth fade for non-image elements
+      } else {
+        animationType = element.getAttribute("ss-animation") || HERO_ANIMATION_CONFIG.defaultType;
+      }
 
       // Create animation instance for each element
       const animation = new ImageReveal([element], {
