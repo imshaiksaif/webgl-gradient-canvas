@@ -2,7 +2,7 @@
   Tasks:
   - Logo Animation stagger up based on page load "Beta [PAGE TITLE]"
   - Image reveal on scroll on projects page
-  
+
   Updates:
   - Replaced CSS wildcard attribute selectors (*=) with direct selectors for Safari compatibility
   - Changed [class*="suffix"] to .suffix, [id*="beta"] to #beta, etc.
@@ -19,9 +19,9 @@ const aniGlobalVars = {
 
   // SVG selectors - using direct attributes for Safari compatibility
   svgElement: "svg",
-  suffixElements: '.suffix', // Direct class selector for suffix elements
-  betaGroup: '#beta', // Direct ID selector for beta group
-  letterElements: '.letter', // Direct class selector for letter elements
+  suffixElements: ".suffix", // Direct class selector for suffix elements
+  betaGroup: "#beta", // Direct ID selector for beta group
+  letterElements: ".letter", // Direct class selector for letter elements
 
   // Page mapping - using direct attribute selectors for Safari compatibility
   pageMapping: {
@@ -147,9 +147,9 @@ const logoUtils = {
 
     // Additional fallback: try to find suffix by ID if selector doesn't work
     // Look for elements with suffix- prefix in their ID
-    const suffixes = svg.querySelectorAll('.suffix');
+    const suffixes = svg.querySelectorAll(".suffix");
     for (const suffix of suffixes) {
-      const id = suffix.getAttribute('id') || '';
+      const id = suffix.getAttribute("id") || "";
       // Check if the ID contains the page name
       for (const [key] of Object.entries(pageMapping)) {
         if (key !== "/" && pathname.includes(key) && id.includes(key)) {
