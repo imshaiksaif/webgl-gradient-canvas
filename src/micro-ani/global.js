@@ -2,6 +2,11 @@
   Tasks:
   - Logo Animation stagger up based on page load "Beta [PAGE TITLE]"
   - Image reveal on scroll on projects page
+  
+  Updates:
+  - Replaced CSS wildcard attribute selectors (*=) with direct selectors for Safari compatibility
+  - Changed [class*="suffix"] to .suffix, [id*="beta"] to #beta, etc.
+  - Updated page mapping to use direct pagepath attribute values
 */
 
 // Global configuration object
@@ -12,18 +17,18 @@ const aniGlobalVars = {
   pageWrapper: ".page-wrapper", // Page wrapper selector
   heroSmallTitle: "[ss-ele='hero-small-title']", // Hero small title elements
 
-  // SVG selectors - using data attributes would be better than IDs
+  // SVG selectors - using direct attributes for Safari compatibility
   svgElement: "svg",
-  suffixElements: '[class*="suffix"]', // Match any element with 'suffix' in class
-  betaGroup: '[id*="beta"]', // Match any element with 'beta' in ID
-  letterElements: '[class*="letter"]', // Match any element with 'letter' in class
+  suffixElements: '.suffix', // Direct class selector for suffix elements
+  betaGroup: '#beta', // Direct ID selector for beta group
+  letterElements: '.letter', // Direct class selector for letter elements
 
-  // Page mapping - avoid hardcoded IDs
+  // Page mapping - using direct attribute selectors for Safari compatibility
   pageMapping: {
-    "/": '[pagePath="/"]',
-    projects: '[pagePath*="projects"]',
-    objects: '[pagePath*="objects"]',
-    lab: '[pagePath*="lab"]'
+    "/": '[pagepath="/"]',
+    projects: '[pagepath="/projects"]',
+    objects: '[pagepath="/objects"]',
+    lab: '[pagepath="/lab"]'
   },
 
   // Animation settings
@@ -100,40 +105,17 @@ const logoUtils = {
 
   // Get suffix elements
   getSuffixElements(svg) {
-    // Try primary selector first
-    let elements = Array.from(svg.querySelectorAll(aniGlobalVars.suffixElements));
-
-    // Safari fallback: try alternative selectors if no elements found
-    if (elements.length === 0) {
-      elements = Array.from(svg.querySelectorAll(".suffix"));
-      logoUtils.debug("Using fallback suffix selector", elements.length);
-    }
-
+    const elements = Array.from(svg.querySelectorAll(aniGlobalVars.suffixElements));
+    console.log("saif Primary suffix selector found elements", elements.length);
     return elements;
   },
 
   // Get beta elements
   getBetaElements(svg) {
-    // Try primary selector
-    let betaGroup = svg.querySelector(aniGlobalVars.betaGroup);
-
-    // Safari fallback: try alternative selectors
-    if (!betaGroup) {
-      betaGroup = svg.querySelector("#beta") || svg.querySelector(".beta");
-      if (betaGroup) {
-        logoUtils.debug("Using fallback beta selector");
-      }
-    }
-
+    const betaGroup = svg.querySelector(aniGlobalVars.betaGroup);
     if (!betaGroup) return [];
 
-    // Get letter elements with fallback
-    let letters = Array.from(betaGroup.querySelectorAll(aniGlobalVars.letterElements));
-    if (letters.length === 0) {
-      letters = Array.from(betaGroup.querySelectorAll(".letter"));
-      logoUtils.debug("Using fallback letter selector", letters.length);
-    }
-
+    const letters = Array.from(betaGroup.querySelectorAll(aniGlobalVars.letterElements));
     return letters;
   },
 
@@ -158,6 +140,20 @@ const logoUtils = {
         const suffix = svg.querySelector(selector);
         if (suffix) {
           logoUtils.debug("Found suffix via partial match", { key, pathname, selector });
+          return suffix;
+        }
+      }
+    }
+
+    // Additional fallback: try to find suffix by ID if selector doesn't work
+    // Look for elements with suffix- prefix in their ID
+    const suffixes = svg.querySelectorAll('.suffix');
+    for (const suffix of suffixes) {
+      const id = suffix.getAttribute('id') || '';
+      // Check if the ID contains the page name
+      for (const [key] of Object.entries(pageMapping)) {
+        if (key !== "/" && pathname.includes(key) && id.includes(key)) {
+          logoUtils.debug("Found suffix via ID fallback", { key, pathname, id });
           return suffix;
         }
       }
@@ -217,6 +213,8 @@ const animationModules = {
   createEnterAnimation(elements, options = {}) {
     const config = { ...aniGlobalVars.animations, ...options };
 
+    console.log("saif Creating enter animation for elements", elements.length, elements);
+
     return gsap.to(elements, {
       y: config.visibleY,
       opacity: config.visible,
@@ -231,6 +229,8 @@ const animationModules = {
   // Create stagger up animation for page transitions
   createStaggerUpAnimation(elements, options = {}) {
     const config = { ...aniGlobalVars.animations, ...options };
+
+    console.log("saif Creating stagger up animation for elements", elements.length, elements);
 
     return gsap.to(elements, {
       y: config.staggerUpY,
@@ -733,6 +733,8 @@ const logoAnimations = {
 
   // Animate suffix in using modular animations
   animateSuffixIn(suffix, isTransition = false) {
+    console.log("saif Animating suffix in", suffix, { isTransition });
+
     const config = aniGlobalVars.animations;
 
     // Show suffix
@@ -958,7 +960,7 @@ if (window.location.hostname === "localhost" || window.location.hostname === "12
 }
 
 // Module exports
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     logoAnimations,
     aniGlobalVars,
@@ -967,3 +969,4 @@ if (typeof module !== 'undefined' && module.exports) {
   };
 }
 
+console.log("Logo animation script loaded");
