@@ -58,7 +58,7 @@ const aniGlobalVars = {
     hiddenY: "100%",
     partialY: "50%",
     visibleY: 0,
-    staggerUpY: "-100%", // Move text completely out of view upward
+    staggerUpY: "-110%", // Move text completely out of view upward
 
     // Opacity
     hidden: 0,
@@ -146,48 +146,25 @@ const logoUtils = {
   findTargetSuffix(svg, pathname) {
     const { pageMapping } = aniGlobalVars;
 
-    // Safari-compatible: Get all suffix elements and filter by attribute
-    const allSuffixes = Array.from(svg.querySelectorAll('[class*="suffix"]'));
-
-    if (allSuffixes.length === 0) {
-      logoUtils.debug("No suffix elements found in SVG");
-      return null;
-    }
-
     // Check exact path first
-    let targetSuffix = null;
     if (pageMapping[pathname]) {
-      targetSuffix = allSuffixes.find((el) => {
-        const pagePath = el.getAttribute("pagePath");
-        return pagePath === pathname;
-      });
-      if (targetSuffix) return targetSuffix;
+      const suffix = svg.querySelector(pageMapping[pathname]);
+      if (suffix) return suffix;
     }
 
-    // Check partial matches
+    // Check partial matches - if pathname CONTAINS the key (e.g., /webflow/objects contains "objects")
     for (const [key, selector] of Object.entries(pageMapping)) {
       if (key !== "/" && pathname.includes(key)) {
-        targetSuffix = allSuffixes.find((el) => {
-          const pagePath = el.getAttribute("pagePath");
-          return pagePath && pagePath.includes(key);
-        });
-        if (targetSuffix) return targetSuffix;
+        const suffix = svg.querySelector(selector);
+        if (suffix) {
+          logoUtils.debug("Found suffix via partial match", { key, pathname, selector });
+          return suffix;
+        }
       }
     }
 
-    // Default to home page - try multiple approaches for Safari
-    targetSuffix = allSuffixes.find((el) => {
-      const pagePath = el.getAttribute("pagePath");
-      return pagePath === "/" || pagePath === "home" || pagePath === "";
-    });
-
-    // If still not found, use first suffix as fallback
-    if (!targetSuffix && allSuffixes.length > 0) {
-      logoUtils.debug("Using first suffix as fallback", allSuffixes[0]);
-      targetSuffix = allSuffixes[0];
-    }
-
-    return targetSuffix;
+    // Default to home page
+    return svg.querySelector(pageMapping["/"]);
   },
 
   // Find currently visible suffix
@@ -257,7 +234,7 @@ const animationModules = {
 
     return gsap.to(elements, {
       y: config.staggerUpY,
-      opacity: config.hidden, // Fade out completely
+      opacity: config.visible, // Keep visible during stagger up
       duration: config.letterDuration * 1.2, // Slightly slower for better visual effect
       ease: config.staggerUpEase,
       stagger: config.staggerUpDelay,
@@ -713,6 +690,18 @@ const logoAnimations = {
 
     const { svg } = elements;
 
+    // Ensure BETA letters are always visible
+    const betaLetters = logoUtils.getBetaElements(svg);
+    if (betaLetters.length > 0) {
+      const config = aniGlobalVars.animations;
+      animationModules.setupElements(betaLetters, {
+        y: config.visibleY,
+        opacity: config.visible,
+        transformOrigin: config.transformOrigin
+      });
+      logoUtils.debug("BETA letters ensured visible", betaLetters.length);
+    }
+
     // Hide all suffixes first
     const allSuffixes = logoUtils.getSuffixElements(svg);
     logoUtils.debug("Found suffix elements", allSuffixes.length);
@@ -729,11 +718,16 @@ const logoAnimations = {
       });
       this.animateSuffixIn(targetSuffix, isTransition);
     } else {
-      logoUtils.debug("No suffix found for page", {
+      logoUtils.debug("No suffix found for page - BETA will remain visible", {
         pathname,
         totalSuffixes: allSuffixes.length,
         availablePaths: allSuffixes.map((s) => s.getAttribute("pagePath"))
       });
+      // Even without suffix, animate navbar and page wrapper
+      const tl = gsap.timeline();
+      tl.add(animationModules.createHeroSmallTitleAnimation("in"));
+      tl.add(animationModules.createNavbarFadeAnimation("in"), "+=0.1");
+      tl.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05");
     }
   },
 
@@ -757,49 +751,25 @@ const logoAnimations = {
     // Create timeline for suffix animation
     const tl = gsap.timeline();
 
-    // Choose animation type based on context
-    if (isTransition) {
-      // Page transition: first animate to visible position, then stagger up
-      logoUtils.debug(
-        "Using transition animation sequence for new page with sequential animations"
-      );
+    // All pages use same simple animation - just stagger in
+    logoUtils.debug("Using stagger in animation for page load", {
+      currentPath: window.location.pathname
+    });
 
-      // Fade in hero small title FIRST (before letters)
-      tl.add(animationModules.createHeroSmallTitleAnimation("in"));
+    // Logo stagger in animation FIRST
+    tl.add(animationModules.createEnterAnimation(letters));
 
-      // Then bring letters to visible position
-      tl.add(
-        animationModules.createEnterAnimation(letters),
-        `+=${config.heroSmallTitleEnterDelay}`
-      );
+    // Fade in hero small title AFTER letters animation completes
+    tl.add(
+      animationModules.createHeroSmallTitleAnimation("in"),
+      `+=${config.heroSmallTitleEnterDelay}`
+    );
 
-      // Then apply stagger up effect with a slight delay
-      tl.add(animationModules.createStaggerUpAnimation(letters), 0.2); // Reduced from 0.3
+    // Fade in navbar AFTER hero title animation completes
+    tl.add(animationModules.createNavbarFadeAnimation("in"), "+=0.1");
 
-      // Fade in navbar AFTER logo animations complete
-      tl.add(animationModules.createNavbarFadeAnimation("in"), "+=0.1"); // Reduced from 0.2
-
-      // Fade in page wrapper AFTER navbar fades in
-      tl.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05"); // Reduced from 0.1
-    } else {
-      // Initial page load: stagger in animation
-      logoUtils.debug("Using stagger in animation for page load with sequential animations");
-
-      // Logo stagger in animation FIRST
-      tl.add(animationModules.createEnterAnimation(letters));
-
-      // Fade in hero small title AFTER letters animation completes
-      tl.add(
-        animationModules.createHeroSmallTitleAnimation("in"),
-        `+=${config.heroSmallTitleEnterDelay}`
-      );
-
-      // Fade in navbar AFTER hero title animation completes - reduced delay for smoother feel
-      tl.add(animationModules.createNavbarFadeAnimation("in"), "+=0.1"); // Reduced from 0.2
-
-      // Fade in page wrapper AFTER navbar fades in - reduced delay
-      tl.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05"); // Reduced from 0.1
-    }
+    // Fade in page wrapper AFTER navbar fades in
+    tl.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05");
 
     // Animate the whole suffix container
     tl.add(animationModules.createSuffixAnimation(suffix, "in"), 0.1);
