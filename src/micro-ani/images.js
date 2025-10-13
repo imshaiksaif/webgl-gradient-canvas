@@ -369,7 +369,10 @@ function animateHeroElementsImmediate(elements) {
 
   try {
     elements.forEach((element, index) => {
-      if (!element || !element.nodeType) return;
+      if (!element || !element.nodeType || element._ssAnimated) return;
+
+      // Mark as animated
+      element._ssAnimated = true;
 
       // Check if element is an image or not
       const isImage = element.tagName.toLowerCase() === "img";
@@ -404,7 +407,10 @@ function setupHeroScrollTriggers(elements) {
 
   try {
     elements.forEach((element, index) => {
-      if (!element || !element.nodeType) return;
+      if (!element || !element.nodeType || element._ssAnimated) return;
+
+      // Mark as animated
+      element._ssAnimated = true;
 
       // Check if element is an image or not
       const isImage = element.tagName.toLowerCase() === "img";
@@ -432,13 +438,15 @@ function setupHeroScrollTriggers(elements) {
   } catch (error) {
     // Error setting up ScrollTrigger for hero elements
   }
-}// Listen for page transition complete event
+} // Listen for page transition complete event
 document.addEventListener("pageTransitionComplete", (event) => {
   initHeroImages();
 });
 
 // Fallback: Initialize hero images on DOM ready if no page transition system
+
 let fallbackExecuted = false;
+let imageRevealInitialized = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   // Optimized delay to see if pageTransitionComplete fires
@@ -466,11 +474,25 @@ document.addEventListener("DOMContentLoaded", () => {
       // Error in fallback initialization
     }
   }, 3000); // Reduced from 5000ms for better UX
-});// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initImageReveal);
-} else {
-  initImageReveal();
+}); // Initialize when DOM is ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!imageRevealInitialized) {
+      imageRevealInitialized = true;
+      console.log("DOM fully loaded and parsed - initializing image reveal:1");
+
+      initImageReveal();
+    }
+  });
+
+  if (document.readyState !== "loading") {
+    if (!imageRevealInitialized) {
+      imageRevealInitialized = true;
+      console.log("DOM fully loaded and parsed - initializing image reveal:2");
+
+      initImageReveal();
+    }
+  }
 }
 
 // Export for global use
