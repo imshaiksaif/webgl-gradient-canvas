@@ -409,9 +409,6 @@ function setupHeroScrollTriggers(elements) {
     elements.forEach((element, index) => {
       if (!element || !element.nodeType || element._ssAnimated) return;
 
-      // Mark as animated
-      element._ssAnimated = true;
-
       // Check if element is an image or not
       const isImage = element.tagName.toLowerCase() === "img";
 
@@ -423,17 +420,28 @@ function setupHeroScrollTriggers(elements) {
         animationType = element.getAttribute("ss-animation") || HERO_ANIMATION_CONFIG.defaultType;
       }
 
-      // Create animation instance for each element
-      const animation = new ImageReveal([element], {
-        animationType: animationType,
+      // Get animation props
+      const { fromProps, toProps } = getAnimationPropsForType(animationType);
+
+      // Set initial state
+      gsap.set(element, { ...fromProps, force3D: true });
+
+      // Animate with ScrollTrigger, mark as animated only when triggered
+      gsap.to(element, {
+        ...toProps,
         duration: HERO_ANIMATION_CONFIG.duration,
         ease: HERO_ANIMATION_CONFIG.ease,
-        start: "top 80%",
-        stagger: HERO_ANIMATION_CONFIG.stagger,
-        debug: false // Disable debug markers for production
+        scrollTrigger: {
+          trigger: element,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+          onEnter: () => {
+            element._ssAnimated = true;
+          }
+          // markers: false // Uncomment for debugging
+        },
+        stagger: HERO_ANIMATION_CONFIG.stagger
       });
-
-      animation.init();
     });
   } catch (error) {
     // Error setting up ScrollTrigger for hero elements
