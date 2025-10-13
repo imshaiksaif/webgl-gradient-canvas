@@ -582,6 +582,19 @@ const logoAnimations = {
       // Fade in page wrapper
       this.timeline.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05");
     }
+
+    // Fade in footer after main animation completes (increased delay)
+    const footerEls = document.querySelectorAll(".footer");
+    if (footerEls.length > 0) {
+      this.timeline.add(
+        gsap.to(footerEls, {
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.out"
+        }),
+        "+=2.8"
+      );
+    }
   },
 
   // Setup navigation listeners using configuration
@@ -728,6 +741,18 @@ const logoAnimations = {
       tl.add(animationModules.createHeroSmallTitleAnimation("in"));
       tl.add(animationModules.createNavbarFadeAnimation("in"), "+=0.1");
       tl.add(animationModules.createPageWrapperFadeAnimation("in"), "+=0.05");
+      // Fade in footer after main animation completes (increased delay)
+      const footerEls = document.querySelectorAll(".footer");
+      if (footerEls.length > 0) {
+        tl.add(
+          gsap.to(footerEls, {
+            opacity: 1,
+            duration: 0.4,
+            ease: "power2.out"
+          }),
+          "+=2.8"
+        );
+      }
     }
   },
 
