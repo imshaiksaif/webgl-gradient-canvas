@@ -27,6 +27,10 @@ const aniGlobalVars = {
   pageMapping: {
     "/": '[pagepath="/"]',
     projects: '[pagepath="/projects"]',
+    // Recognize individual project detail pages (e.g. /project/bob-soap-applicator)
+    // Note: avoid CSS starts-with ([attr^=...]) for Safari compatibility; we'll
+    // perform a JS-based fallback check inside `findTargetSuffix`.
+    project: '[pagepath="/project"]',
     objects: '[pagepath="/objects"]',
     lab: '[pagepath="/lab"]'
   },
@@ -106,7 +110,6 @@ const logoUtils = {
   // Get suffix elements
   getSuffixElements(svg) {
     const elements = Array.from(svg.querySelectorAll(aniGlobalVars.suffixElements));
-    console.log("saif Primary suffix selector found elements", elements.length);
     return elements;
   },
 
@@ -159,6 +162,33 @@ const logoUtils = {
       }
     }
 
+    // Additional JS-based fallback: Some Webflow-generated attributes may use
+    // `pagePath` or include the segment (e.g. `/project/bob-soap-applicator`).
+    // We'll check attributes directly (startsWith) to avoid CSS ^= selectors
+    // that have spotty Safari support.
+    for (const suffix of suffixes) {
+      // Try both lowercase and camelCase attribute names
+      const attr1 = suffix.getAttribute("pagepath") || "";
+      const attr2 = suffix.getAttribute("pagePath") || "";
+      const combined = (attr1 || attr2).toString();
+
+      for (const [key] of Object.entries(pageMapping)) {
+        if (key === "/") continue;
+        if (pathname.includes(key)) {
+          // If combined attribute starts with the mapping (e.g. '/project') or
+          // contains the key, consider it a match.
+          if (combined.startsWith(key) || combined.includes(key)) {
+            logoUtils.debug("Found suffix via attribute fallback", {
+              key,
+              pathname,
+              attr: combined
+            });
+            return suffix;
+          }
+        }
+      }
+    }
+
     // Default to home page
     return svg.querySelector(pageMapping["/"]);
   },
@@ -185,7 +215,8 @@ const logoUtils = {
   // Log debug info
   debug(message, data = null) {
     if (aniGlobalVars.navigation.debugMode) {
-      console.log(`[Logo Animation] ${message}`, data);
+      // use console.debug for less intrusive developer logs
+      console.debug && console.debug(`[Logo Animation] ${message}`, data);
     }
   },
 
@@ -213,8 +244,6 @@ const animationModules = {
   createEnterAnimation(elements, options = {}) {
     const config = { ...aniGlobalVars.animations, ...options };
 
-    console.log("saif Creating enter animation for elements", elements.length, elements);
-
     return gsap.to(elements, {
       y: config.visibleY,
       opacity: config.visible,
@@ -229,8 +258,6 @@ const animationModules = {
   // Create stagger up animation for page transitions
   createStaggerUpAnimation(elements, options = {}) {
     const config = { ...aniGlobalVars.animations, ...options };
-
-    console.log("saif Creating stagger up animation for elements", elements.length, elements);
 
     return gsap.to(elements, {
       y: config.staggerUpY,
@@ -324,6 +351,7 @@ const animationModules = {
       logoUtils.debug("No page wrapper elements found");
       return gsap.timeline(); // Return empty timeline
     }
+    logoUtils.debug("Direction for page wrapper fade", direction);
 
     if (direction === "out") {
       return gsap.to(pageWrapperElements, {
@@ -638,9 +666,24 @@ const logoAnimations = {
     };
 
     // Handle popstate (back/forward buttons)
+    // When the user navigates with the browser back/forward buttons the
+    // document is already at the new URL; we should run the incoming page
+    // animations (recall) rather than trying to perform a controlled
+    // transition which may attempt to navigate again.
     window.addEventListener("popstate", (event) => {
       if (!this.isTransitioning) {
-        handlePathChange(window.location.pathname);
+        logoUtils.debug("popstate detected - running incoming page animation");
+
+        // Update current path and re-setup state as if coming from a
+        // transition, then run the page load animation to recall the logo.
+        this.currentPath = window.location.pathname;
+        this.setupInitialStateForTransition();
+
+        // Slight delay to allow DOM/GSAP setup
+        setTimeout(() => {
+          logoUtils.removeAntiFlickerCSS();
+          this.animatePageLoad();
+        }, 50);
       }
     });
 
@@ -686,6 +729,23 @@ const logoAnimations = {
             // Don't prevent default - let browser handle normally
           }
         }
+      }
+    });
+
+    // Handle pageshow (BFCache restore) - recall animations when the page is
+    // restored from the back-forward cache. event.persisted is true for BFCache.
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) {
+        logoUtils.debug("pageshow persisted - recalling animations from bfcache");
+
+        // Reset and re-run the page load animation for the restored page
+        this.currentPath = window.location.pathname;
+        this.setupInitialStateForTransition();
+
+        setTimeout(() => {
+          logoUtils.removeAntiFlickerCSS();
+          this.animatePageLoad();
+        }, 50);
       }
     });
 
@@ -758,8 +818,6 @@ const logoAnimations = {
 
   // Animate suffix in using modular animations
   animateSuffixIn(suffix, isTransition = false) {
-    console.log("saif Animating suffix in", suffix, { isTransition });
-
     const config = aniGlobalVars.animations;
 
     // Show suffix
@@ -994,4 +1052,4 @@ if (typeof module !== "undefined" && module.exports) {
   };
 }
 
-console.log("Logo animation script loaded");
+
