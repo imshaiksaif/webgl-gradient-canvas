@@ -11,7 +11,21 @@ let imageCaptionsCache = null;
 // Global flag: if window.SS_IMAGE_ANIM && window.SS_IMAGE_ANIM.heroOnly === true
 // then only initial/hero animations should run; scroll-triggered reveals are disabled.
 const SS_IMAGE_ANIM = typeof window !== 'undefined' ? window.SS_IMAGE_ANIM || {} : {};
-const HERO_ONLY_IMAGE_ANIM = SS_IMAGE_ANIM.heroOnly === true;
+
+// Detect mobile (matchMedia if available, fallback to innerWidth)
+const IS_MOBILE =
+  typeof window !== 'undefined' && (window.matchMedia ? window.matchMedia('(max-width: 768px)').matches : window.innerWidth <= 768);
+
+// Normalize path for detail detection
+const NORMALIZED_PATH = typeof window !== 'undefined' ? window.location.pathname.replace(/\/$/, '') : '';
+
+// Disable scroll reveals on mobile for individual project/object detail pages
+const MOBILE_DETAIL_PAGE = IS_MOBILE && (NORMALIZED_PATH.includes('/project/') || NORMALIZED_PATH.includes('/object/'));
+
+// Final effective flag: global override OR mobile detail pages
+const HERO_ONLY_IMAGE_ANIM = SS_IMAGE_ANIM.heroOnly === true || MOBILE_DETAIL_PAGE;
+
+
 
 // Get hero elements with caching
 function getHeroElements() {
