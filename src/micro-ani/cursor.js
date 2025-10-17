@@ -1,20 +1,39 @@
 // Configuration
 const CURSOR_CONFIG = {
-  size: 22,                // Cursor size in pixels
-  color: '#fff',           // Cursor color
-  blendMode: 'difference', // CSS blend mode
-  easeSpeed: 0.15,         // Lower = smoother but slower (0.1-0.3 recommended)
-  hoverScale: 1.5,         // Scale multiplier on hover
-  hoverOpacity: 0.6        // Opacity on hover
+  size: 22, // Cursor size in pixels
+  color: "#fff", // Cursor color
+  blendMode: "difference", // CSS blend mode
+  // Higher = snappier / less lag. Try values between 0.3 - 0.7. Set to 1 for instant follow.
+  easeSpeed: 0.7,
+  hoverScale: 1.5, // Scale multiplier on hover
+  hoverOpacity: 0.6 // Opacity on hover
 };
+
+// Runtime override helper: you can set one of these from the console to test without editing
+// window.CURSOR_EASE_SPEED = 0.5
+// window.cursorEaseSpeed = 0.5
+// window.__CURSOR_CONFIG = { easeSpeed: 0.5 }
+function getEaseSpeed() {
+  try {
+    if (typeof window !== "undefined") {
+      if (typeof window.CURSOR_EASE_SPEED === "number") return window.CURSOR_EASE_SPEED;
+      if (typeof window.cursorEaseSpeed === "number") return window.cursorEaseSpeed;
+      if (window.__CURSOR_CONFIG && typeof window.__CURSOR_CONFIG.easeSpeed === "number")
+        return window.__CURSOR_CONFIG.easeSpeed;
+    }
+  } catch (e) {
+    // ignore access errors in exotic environments
+  }
+  return CURSOR_CONFIG.easeSpeed;
+}
 
 // Inject CSS styles for the cursor
 function injectCursorStyles() {
   // Check if styles already exist
-  if (document.getElementById('custom-cursor-styles')) return;
+  if (document.getElementById("custom-cursor-styles")) return;
 
-  const style = document.createElement('style');
-  style.id = 'custom-cursor-styles';
+  const style = document.createElement("style");
+  style.id = "custom-cursor-styles";
   style.textContent = `
     .cursor {
       position: fixed;
@@ -27,7 +46,9 @@ function injectCursorStyles() {
       pointer-events: none;
       mix-blend-mode: ${CURSOR_CONFIG.blendMode};
       opacity: 0;
-      transition: transform .08s ease-out, opacity .15s ease-out;
+    /* Remove transform transition so JS-driven positioning isn't double-smoothed.
+      Keep only opacity transitioning for fades. */
+    transition: opacity .12s ease-out;
       will-change: transform, opacity;
       z-index: 9999;
     }
@@ -86,11 +107,37 @@ function initCursor() {
   let rafId = null;
   let isActive = false;
 
+  // Cache easing to avoid calling getter each frame. Call refreshCursorEase() to update.
+  let cachedEase = (function () {
+    let e = getEaseSpeed();
+    if (!Number.isFinite(e)) e = CURSOR_CONFIG.easeSpeed;
+    return Math.max(0, Math.min(1, e));
+  })();
+
+  function refreshCachedEase() {
+    let v = getEaseSpeed();
+    if (!Number.isFinite(v)) v = CURSOR_CONFIG.easeSpeed;
+    v = Math.max(0, Math.min(1, v));
+    cachedEase = v;
+    return cachedEase;
+  }
+
+  try {
+    if (typeof window !== "undefined") {
+      window.refreshCursorEase = refreshCachedEase;
+      window.setCursorEase = function (v) {
+        window.cursorEaseSpeed = v;
+        return refreshCachedEase();
+      };
+    }
+  } catch (e) {
+    // ignore
+  }
+
   function tick() {
-    // Smooth interpolation for organic feel
-    const ease = CURSOR_CONFIG.easeSpeed;
-    currentX += (mx - currentX) * ease;
-    currentY += (my - currentY) * ease;
+    // Smooth interpolation for organic feel (uses cached value for performance)
+    currentX += (mx - currentX) * cachedEase;
+    currentY += (my - currentY) * cachedEase;
 
     // Use transform to position the cursor
     cursor.style.transform = `translate(${currentX}px, ${currentY}px) scale(var(--cursor-scale, 1))`;
@@ -155,7 +202,7 @@ function initCursor() {
   });
   mo.observe(document.documentElement, { childList: true, subtree: true });
 
-    // Optional: hide when leaving window, re-show on enter
+  // Optional: hide when leaving window, re-show on enter
   window.addEventListener(
     "mouseleave",
     () => {
