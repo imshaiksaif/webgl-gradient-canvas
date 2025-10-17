@@ -8,6 +8,11 @@
 let heroElementsCache = null;
 let imageCaptionsCache = null;
 
+// Global flag: if window.SS_IMAGE_ANIM && window.SS_IMAGE_ANIM.heroOnly === true
+// then only initial/hero animations should run; scroll-triggered reveals are disabled.
+const SS_IMAGE_ANIM = typeof window !== 'undefined' ? window.SS_IMAGE_ANIM || {} : {};
+const HERO_ONLY_IMAGE_ANIM = SS_IMAGE_ANIM.heroOnly === true;
+
 // Get hero elements with caching
 function getHeroElements() {
   if (!heroElementsCache) {
@@ -131,6 +136,25 @@ class ImageReveal {
       force3D: true
     });
 
+    // If global flag requests hero-only animations (no scroll reveals),
+    // run a one-shot tween to the final state and do not create ScrollTriggers.
+    if (HERO_ONLY_IMAGE_ANIM) {
+      // Store reference so destroy() can kill it if needed
+      this.tween = gsap.to(this.elements, {
+        ...toProps,
+        duration: this.options.duration,
+        ease: this.options.ease,
+        stagger: this.options.stagger
+      });
+
+      // Force ScrollTrigger refresh (safe no-op if none exist)
+      setTimeout(() => {
+        if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+      }, 100);
+
+      return;
+    }
+
     // Create individual ScrollTrigger for each element
     this.elements.forEach((element, index) => {
       const animation = gsap.to(element, {
@@ -198,11 +222,23 @@ class ImageReveal {
 
   destroy() {
     // Kill all ScrollTriggers associated with our elements
-    ScrollTrigger.getAll().forEach((trigger) => {
-      if (trigger.vars && trigger.vars.trigger && this.elements.includes(trigger.vars.trigger)) {
-        trigger.kill();
+    if (typeof ScrollTrigger !== "undefined") {
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars && trigger.vars.trigger && this.elements.includes(trigger.vars.trigger)) {
+          trigger.kill();
+        }
+      });
+    }
+
+    // Kill any one-shot tween created when HERO_ONLY_IMAGE_ANIM is enabled
+    try {
+      if (this.tween) {
+        this.tween.kill();
+        this.tween = null;
       }
-    });
+    } catch (e) {
+      // ignore
+    }
 
     // Reset elements to initial state
     gsap.set(this.elements, {
@@ -487,7 +523,6 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
     if (!imageRevealInitialized) {
       imageRevealInitialized = true;
-      console.log("DOM fully loaded and parsed - initializing image reveal:1");
 
       initImageReveal();
     }
@@ -496,7 +531,6 @@ if (document.readyState === "loading") {
   if (document.readyState !== "loading") {
     if (!imageRevealInitialized) {
       imageRevealInitialized = true;
-      console.log("DOM fully loaded and parsed - initializing image reveal:2");
 
       initImageReveal();
     }
